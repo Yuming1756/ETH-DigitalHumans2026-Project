@@ -143,15 +143,25 @@ Place EgoHumans data under:
 ```text
 data/
 ```
-1. The data/colmap should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/colmap
-2. The data/ego should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/ego
-3. The data/exo should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/exo
-4. The data/mesh_cam should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/mesh_cam
-5. The data/poses2d should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/poses2d
+The local data/ folder should be copied from the shared course directory as follows:
 
+'''text
+data/colmap   <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/colmap
+data/ego      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/ego
+data/exo      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/exo
+data/mesh_cam <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/mesh_cam
+data/poses2d  <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/poses2d
+'''
 
 ### 3. TokenHMR outputs
-Copy /work/courses/digital_human/team6/TokenHMR/demo_out/my_image to TokenHMR/demo_out/my_image/
+Copy the TokenHMR prediction outputs from:
+'''text
+/work/courses/digital_human/team6/TokenHMR/demo_out/my_image
+'''
+to:
+'''text
+TokenHMR/demo_out/my_image/
+'''
 
 Expected example files:
 ```text
@@ -165,7 +175,15 @@ TokenHMR/demo_out/my_image_smplify_adam/
 ```
 
 ### 4. 4D-Humans outputs
-Copy /work/courses/digital_human/team6/4D-Humans/demo_out/my_image to 4D-Humans/demo_out/my_image/
+Copy the 4D-Humans prediction outputs from:
+'''text
+/work/courses/digital_human/team6/4D-Humans/demo_out/my_image
+'''
+to:
+'''text
+4D-Humans/demo_out/my_image/
+'''
+
 Expected example files:
 
 ```text
