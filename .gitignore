@@ -1,0 +1,43 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+*.egg-info/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+
+# Logs
+*.log
+logs/
+
+# Ignore large data/output contents
+data/*
+TokenHMR/demo_out/*
+4D-Humans/demo_out/*
+head_targets/*
+
+# But keep README placeholders
+!data/README.md
+!TokenHMR/demo_out/README.md
+!4D-Humans/demo_out/README.md
+!head_targets/README.md
+
+# Large files
+*.obj
+*.npz
+*.pkl
+*.pt
+*.pth
+*.ckpt
+*.mp4
+
+# Metrics outputs
+metrics_*.csv
+*_summary.csv

@@ -1,0 +1,268 @@
+# DigitalHumans Project
+
+This repository contains the project-specific scripts for comparing **TokenHMR** and **4D-Humans** reconstruction results with **EgoHumans** ground-truth meshes.
+
+The pipeline includes:
+
+1. Preparing prediction outputs from TokenHMR or 4D-Humans.
+2. Extracting EgoHumans head targets.
+3. Running optimization.
+4. Visualizing baseline and optimized meshes.
+5. Computing evaluation metrics against EgoHumans ground truth.
+
+Large data files, SMPL model files, prediction outputs, optimized meshes, and generated `.npz` / `.obj` files are **not included** in this GitHub repository. They should be placed locally according to the folder structure below.
+
+---
+
+## Folder structure
+
+```text
+Project/
+├── README.md
+├── .gitignore
+│
+├── smpl/
+│   ├── README.md
+│   └── basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+│
+├── data/
+│   ├── README.md
+│   ├── colmap/
+│   ├── ego/
+│   ├── exo/
+│   ├── mesh_cam/
+│   │   └── cam01/
+│   │       └── rgb/
+│   │           └── 00001/
+│   │               ├── mesh_aria01.obj
+│   │               ├── mesh_aria02.obj
+│   │               ├── mesh_aria03.obj
+│   │               └── mesh_aria04.obj
+│   └── poses2d/
+│
+├── head_targets/
+│   ├── README.md
+│   ├── 00001_aria01_cam01_egohumans_style.txt
+│   ├── 00001_aria02_cam01_egohumans_style.txt
+│   ├── 00001_aria03_cam01_egohumans_style.txt
+│   └── 00001_aria04_cam01_egohumans_style.txt
+│
+├── src/
+│   ├── README.md
+│   ├── baseline_mpjpe_same_regressor.py
+│   ├── compute_total_loss.py
+│   ├── make_aria_head_target.py
+│   ├── smplify_v1_translation.py
+│   ├── evaluate_optimized_vs_gt.py
+│   ├── visualize_baseline_vs_egohumans_mesh3d.py
+│   └── visualize_frame_before_after_all_people.py
+│
+├── TokenHMR/
+│   ├── README.md
+│   └── demo_out/
+│       ├── README.md
+│       ├── my_image/
+│       ├── my_image_smplify_adam/
+│       ├── my_image_smplify_lbfgs/
+│       └── my_image_smplify_v1/
+│
+├── 4D-Humans/
+│   ├── README.md
+│   └── demo_out/
+│       ├── README.md
+│       ├── my_image/
+│       ├── my_image_smplify_adam/
+│       ├── my_image_smplify_lbfgs/
+│       └── my_image_smplify_v1/
+│
+├── extract_all_aria_targets.sh
+├── run_baseline_all.sh
+├── run_smplify_frame.sh
+├── visualize_baseline_vs_egohumans.sh
+└── visualize_smplify_frame.sh
+```
+
+## Required local files
+
+### 1. SMPL model
+
+Place the SMPL model file here:
+
+```text
+smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+```
+This file is required because the scripts use the SMPL joint regressor to convert SMPL vertices into joints.
+
+### 2. EgoHumans data
+
+Place EgoHumans data under:
+```text
+data/
+```
+The ground-truth camera-space meshes should follow this structure:
+```text
+data/mesh_cam/cam01/rgb/<frame>/mesh_ariaXX.obj
+```
+
+### 3. TokenHMR outputs
+Place TokenHMR prediction outputs here:
+```text
+TokenHMR/demo_out/my_image/
+```
+Expected example files:
+```text
+TokenHMR/demo_out/my_image/00001_0.obj
+TokenHMR/demo_out/my_image/00001_0_tkhmr.npz
+```
+After optimization, results are saved to folders such as:
+```text
+TokenHMR/demo_out/my_image_smplify_lbfgs/
+TokenHMR/demo_out/my_image_smplify_adam/
+```
+
+### 4. 4D-Humans outputs
+Place 4D-Humans prediction outputs here:
+```text
+4D-Humans/demo_out/my_image/
+```
+Expected example files:
+```text
+4D-Humans/demo_out/my_image/00001_0.obj
+4D-Humans/demo_out/my_image/00001_0_4dhumans.npz
+```
+After optimization, results are saved to folders such as:
+```text
+4D-Humans/demo_out/my_image_smplify_lbfgs/
+4D-Humans/demo_out/my_image_smplify_adam/
+```
+
+## Usage
+
+All commands should be run from the project root:
+
+```bash
+cd Project
+```
+### 1. Run baseline evaluation
+
+For TokenHMR:
+```bash
+./run_baseline_all.sh tokenhmr
+```
+For 4D-Humans:
+
+```bash
+./run_baseline_all.sh 4dhumans
+```
+
+This evaluates the original prediction meshes against EgoHumans ground-truth meshes.
+
+### 2. Extract EgoHumans head targets
+
+```bash
+./extract_all_aria_targets.sh 00001 cam01
+```
+
+This creates files in:
+
+```text
+head_targets/
+```
+
+Example:
+```text
+head_targets/00001_aria03_cam01_egohumans_style.txt
+```
+
+These targets are used by the optimization step.
+
+### 3. Run optimization
+
+For TokenHMR:
+```text
+./run_smplify_frame.sh 00001 tokenhmr lbfgs
+```
+
+For 4D-Humans:
+```text
+./run_smplify_frame.sh 00001 4dhumans lbfgs
+```
+
+Arguments:
+```text
+1st argument: frame ID, e.g. 00001
+2nd argument: model name, tokenhmr or 4dhumans
+3rd argument: optimizer, lbfgs or adam
+```
+
+Optimized meshes are saved to:
+```text
+TokenHMR/demo_out/my_image_smplify_lbfgs/
+4D-Humans/demo_out/my_image_smplify_lbfgs/
+```
+### 4. Visualize baseline predictions
+
+For TokenHMR:
+```bash
+./visualize_baseline_vs_egohumans.sh 00001 tokenhmr
+```
+
+For 4D-Humans:
+```bash
+./visualize_baseline_vs_egohumans.sh 00001 4dhumans
+```
+
+### 5. Visualize before and after optimization
+
+For TokenHMR:
+```bash
+./visualize_smplify_frame.sh 00001 tokenhmr lbfgs
+```
+For 4D-Humans:
+```bash
+./visualize_smplify_frame.sh 00001 4dhumans lbfgs
+```
+6. Evaluate optimized meshes
+
+Use the following command:
+
+```bash
+python src/evaluate_optimized_vs_gt.py \
+  --frame 00001 \
+  --model tokenhmr \
+  --optimizer lbfgs \
+  --smpl_model_dir ./smpl
+```
+
+Arguments:
+```text
+--frame:          frame ID, e.g. 00001
+--model:          model name, tokenhmr or 4dhumans
+--optimizer:      optimizer name, lbfgs or adam
+--smpl_model_dir: SMPL model directory
+```
+
+The evaluation computes:
+```text
+Raw MPJPE
+Root-aligned MPJPE
+PA-MPJPE
+Mean vertex error
+Global root drift
+```
+
+The script performs automatic per-frame identity matching between detection IDs and EgoHumans identities.
+
+Identity matching
+
+Detection IDs are not guaranteed to stay consistent across frames.
+
+For example, this mapping may be correct in one frame:
+```text
+det 0 -> aria03
+det 1 -> aria02
+```
+but wrong in another frame.
+
+Therefore, the evaluation scripts use automatic per-frame matching based on minimum root-aligned SMPL-joint MPJPE.
+

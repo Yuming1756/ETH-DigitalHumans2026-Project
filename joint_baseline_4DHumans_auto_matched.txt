@@ -1,0 +1,1328 @@
+================ AUTO-MATCHED JOINT-RELATED BASELINE RESULTS ================
+Model: 4DHumans
+Prediction dir: ../4D-Humans/demo_out/my_image
+GT root: ./data/mesh_cam/cam01/rgb
+SMPL model dir: ./smpl
+Output file: joint_baseline_4DHumans_auto_matched.txt
+Generated at: Tue May 12 05:00:43 PM CST 2026
+
+Identity matching:
+  Per-frame auto matching by minimum root-aligned SMPL-joint MPJPE
+  This fixes unstable detection IDs across frames.
+
+
+################################################################
+Model: 4DHumans
+Frame: 00001
+Prediction frame files: ../4D-Humans/demo_out/my_image/00001_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00001
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00001_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00001_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00001_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00001_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[317.7196  479.6841  168.66278 488.6304 ]
+ [324.49222 233.87439 471.46213 219.56221]
+ [180.59659 407.8118  302.05826 336.36475]
+ [264.5144  302.64056 444.89752 185.67061]]
+
+Best total matching score: 768.80 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria02
+  det 2 -> aria01
+  det 3 -> aria04
+--------------------------------------------
+
+############################################################
+Frame: 00001
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00001_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00001_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1161.20 mm
+Root-aligned MPJPE:     168.66 mm
+PA-MPJPE:               60.85 mm
+Global root drift:      1.1626 m
+==============================================================
+
+############################################################
+Frame: 00001
+TokenHMR detection id: 1
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00001_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00001_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1881.65 mm
+Root-aligned MPJPE:     233.87 mm
+PA-MPJPE:               69.69 mm
+Global root drift:      1.8521 m
+==============================================================
+
+############################################################
+Frame: 00001
+TokenHMR detection id: 2
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00001_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00001_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              2093.74 mm
+Root-aligned MPJPE:     180.60 mm
+PA-MPJPE:               87.70 mm
+Global root drift:      2.1403 m
+==============================================================
+
+############################################################
+Frame: 00001
+TokenHMR detection id: 3
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00001_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00001_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              2065.22 mm
+Root-aligned MPJPE:     185.67 mm
+PA-MPJPE:               77.76 mm
+Global root drift:      2.1724 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00002
+Prediction frame files: ../4D-Humans/demo_out/my_image/00002_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00002
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00002_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00002_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00002_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00002_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[320.0026  221.67538 468.10242 245.64636]
+ [310.8169  468.7697  172.57445 465.72302]
+ [237.1978  297.86035 423.1582  187.95168]
+ [183.08437 382.19165 284.42273 328.65424]]
+
+Best total matching score: 765.29 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria02
+  det 1 -> aria03
+  det 2 -> aria04
+  det 3 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00002
+TokenHMR detection id: 0
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00002_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00002_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1959.74 mm
+Root-aligned MPJPE:     221.68 mm
+PA-MPJPE:               72.52 mm
+Global root drift:      1.9286 m
+==============================================================
+
+############################################################
+Frame: 00002
+TokenHMR detection id: 1
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00002_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00002_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1228.36 mm
+Root-aligned MPJPE:     172.57 mm
+PA-MPJPE:               70.12 mm
+Global root drift:      1.2317 m
+==============================================================
+
+############################################################
+Frame: 00002
+TokenHMR detection id: 2
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00002_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00002_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1878.78 mm
+Root-aligned MPJPE:     187.95 mm
+PA-MPJPE:               80.15 mm
+Global root drift:      1.9867 m
+==============================================================
+
+############################################################
+Frame: 00002
+TokenHMR detection id: 3
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00002_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00002_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              1856.87 mm
+Root-aligned MPJPE:     183.08 mm
+PA-MPJPE:               84.98 mm
+Global root drift:      1.9056 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00003
+Prediction frame files: ../4D-Humans/demo_out/my_image/00003_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00003
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00003_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00003_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00003_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00003_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[321.04755 466.16245 179.74265 466.6423 ]
+ [309.6324  214.7791  465.40793 263.65604]
+ [224.59186 296.5079  414.23734 202.1801 ]
+ [191.15572 360.34045 289.67664 323.88205]]
+
+Best total matching score: 787.86 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria02
+  det 2 -> aria04
+  det 3 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00003
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00003_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00003_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1238.10 mm
+Root-aligned MPJPE:     179.74 mm
+PA-MPJPE:               74.79 mm
+Global root drift:      1.2370 m
+==============================================================
+
+############################################################
+Frame: 00003
+TokenHMR detection id: 1
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00003_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00003_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1995.58 mm
+Root-aligned MPJPE:     214.78 mm
+PA-MPJPE:               79.31 mm
+Global root drift:      1.9693 m
+==============================================================
+
+############################################################
+Frame: 00003
+TokenHMR detection id: 2
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00003_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00003_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1912.55 mm
+Root-aligned MPJPE:     202.18 mm
+PA-MPJPE:               88.39 mm
+Global root drift:      2.0358 m
+==============================================================
+
+############################################################
+Frame: 00003
+TokenHMR detection id: 3
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00003_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00003_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              1607.51 mm
+Root-aligned MPJPE:     191.16 mm
+PA-MPJPE:               84.28 mm
+Global root drift:      1.6628 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00004
+Prediction frame files: ../4D-Humans/demo_out/my_image/00004_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00004
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00004_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00004_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00004_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00004_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[321.91858 458.29288 167.50227 425.49826]
+ [186.66064 290.71805 379.22583 196.21404]
+ [274.1035  200.9331  458.8838  277.11484]
+ [170.3164  330.2841  282.21622 269.05505]]
+
+Best total matching score: 734.97 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria04
+  det 2 -> aria02
+  det 3 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00004
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00004_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00004_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1172.86 mm
+Root-aligned MPJPE:     167.50 mm
+PA-MPJPE:               70.62 mm
+Global root drift:      1.1717 m
+==============================================================
+
+############################################################
+Frame: 00004
+TokenHMR detection id: 1
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00004_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00004_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1843.60 mm
+Root-aligned MPJPE:     196.21 mm
+PA-MPJPE:               84.91 mm
+Global root drift:      1.9557 m
+==============================================================
+
+############################################################
+Frame: 00004
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00004_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00004_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              2065.55 mm
+Root-aligned MPJPE:     200.93 mm
+PA-MPJPE:               79.75 mm
+Global root drift:      2.0510 m
+==============================================================
+
+############################################################
+Frame: 00004
+TokenHMR detection id: 3
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00004_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00004_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              1846.70 mm
+Root-aligned MPJPE:     170.32 mm
+PA-MPJPE:               75.36 mm
+Global root drift:      1.8985 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00005
+Prediction frame files: ../4D-Humans/demo_out/my_image/00005_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00005
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00005_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00005_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00005_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00005_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[325.37344 441.2012  169.77724 407.23523]
+ [202.29356 285.9444  371.0691  193.11583]
+ [264.53592 197.65782 457.07642 278.83844]
+ [174.04825 317.92758 281.3138  257.39227]]
+
+Best total matching score: 734.60 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria04
+  det 2 -> aria02
+  det 3 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00005
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00005_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00005_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1165.68 mm
+Root-aligned MPJPE:     169.78 mm
+PA-MPJPE:               73.69 mm
+Global root drift:      1.1658 m
+==============================================================
+
+############################################################
+Frame: 00005
+TokenHMR detection id: 1
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00005_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00005_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1812.35 mm
+Root-aligned MPJPE:     193.12 mm
+PA-MPJPE:               86.18 mm
+Global root drift:      1.9221 m
+==============================================================
+
+############################################################
+Frame: 00005
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00005_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00005_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              2121.01 mm
+Root-aligned MPJPE:     197.66 mm
+PA-MPJPE:               69.29 mm
+Global root drift:      2.0985 m
+==============================================================
+
+############################################################
+Frame: 00005
+TokenHMR detection id: 3
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00005_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00005_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              1724.39 mm
+Root-aligned MPJPE:     174.05 mm
+PA-MPJPE:               82.97 mm
+Global root drift:      1.7906 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00006
+Prediction frame files: ../4D-Humans/demo_out/my_image/00006_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00006
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00006_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00006_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00006_2.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00006_3.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2', '3']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[234.5425  271.2351  367.81226 204.7451 ]
+ [321.93533 401.93112 165.56699 388.24985]
+ [223.93973 175.60606 415.2168  278.76022]
+ [171.99771 236.76143 359.25555 227.76262]]
+
+Best total matching score: 717.92 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria04
+  det 1 -> aria03
+  det 2 -> aria02
+  det 3 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00006
+TokenHMR detection id: 0
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00006_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00006_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1824.57 mm
+Root-aligned MPJPE:     204.75 mm
+PA-MPJPE:               94.67 mm
+Global root drift:      1.9403 m
+==============================================================
+
+############################################################
+Frame: 00006
+TokenHMR detection id: 1
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00006_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00006_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1208.98 mm
+Root-aligned MPJPE:     165.57 mm
+PA-MPJPE:               82.37 mm
+Global root drift:      1.1991 m
+==============================================================
+
+############################################################
+Frame: 00006
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00006_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00006_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1964.17 mm
+Root-aligned MPJPE:     175.61 mm
+PA-MPJPE:               54.40 mm
+Global root drift:      1.9433 m
+==============================================================
+
+############################################################
+Frame: 00006
+TokenHMR detection id: 3
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00006_3.obj
+Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00006_3.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              1896.53 mm
+Root-aligned MPJPE:     172.00 mm
+PA-MPJPE:               110.48 mm
+Global root drift:      1.9437 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00007
+Prediction frame files: ../4D-Humans/demo_out/my_image/00007_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00007
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00007_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00007_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00007_2.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[236.637   255.25818 369.01855 206.83893]
+ [326.71686 394.47736 151.36171 397.13947]
+ [216.47488 174.31993 395.6164  271.07123]]
+
+Best total matching score: 532.52 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria04
+  det 1 -> aria03
+  det 2 -> aria02
+--------------------------------------------
+
+############################################################
+Frame: 00007
+TokenHMR detection id: 0
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00007_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00007_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1818.05 mm
+Root-aligned MPJPE:     206.84 mm
+PA-MPJPE:               100.23 mm
+Global root drift:      1.9348 m
+==============================================================
+
+############################################################
+Frame: 00007
+TokenHMR detection id: 1
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00007_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00007_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1182.03 mm
+Root-aligned MPJPE:     151.36 mm
+PA-MPJPE:               67.75 mm
+Global root drift:      1.1707 m
+==============================================================
+
+############################################################
+Frame: 00007
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00007_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00007_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1925.00 mm
+Root-aligned MPJPE:     174.32 mm
+PA-MPJPE:               45.83 mm
+Global root drift:      1.9128 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00008
+Prediction frame files: ../4D-Humans/demo_out/my_image/00008_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00008
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00008_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00008_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00008_2.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[336.45068 377.3044  184.85922 391.78787]
+ [244.97331 247.39285 376.6196  196.93816]
+ [214.62105 185.15675 380.39423 280.5838 ]]
+
+Best total matching score: 566.95 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria04
+  det 2 -> aria02
+--------------------------------------------
+
+############################################################
+Frame: 00008
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00008_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00008_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1315.83 mm
+Root-aligned MPJPE:     184.86 mm
+PA-MPJPE:               77.66 mm
+Global root drift:      1.2917 m
+==============================================================
+
+############################################################
+Frame: 00008
+TokenHMR detection id: 1
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00008_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00008_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1709.44 mm
+Root-aligned MPJPE:     196.94 mm
+PA-MPJPE:               101.39 mm
+Global root drift:      1.7960 m
+==============================================================
+
+############################################################
+Frame: 00008
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00008_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00008_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1908.47 mm
+Root-aligned MPJPE:     185.16 mm
+PA-MPJPE:               65.88 mm
+Global root drift:      1.9239 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00009
+Prediction frame files: ../4D-Humans/demo_out/my_image/00009_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00009
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00009_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00009_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00009_2.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[345.95502 385.8975  182.65929 397.45883]
+ [238.07005 257.10812 381.40796 188.47728]
+ [201.59012 182.22267 396.76514 285.50397]]
+
+Best total matching score: 553.36 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria04
+  det 2 -> aria02
+--------------------------------------------
+
+############################################################
+Frame: 00009
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00009_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00009_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1296.50 mm
+Root-aligned MPJPE:     182.66 mm
+PA-MPJPE:               71.01 mm
+Global root drift:      1.2694 m
+==============================================================
+
+############################################################
+Frame: 00009
+TokenHMR detection id: 1
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00009_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00009_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1645.29 mm
+Root-aligned MPJPE:     188.48 mm
+PA-MPJPE:               96.91 mm
+Global root drift:      1.6975 m
+==============================================================
+
+############################################################
+Frame: 00009
+TokenHMR detection id: 2
+Auto-matched GT person: aria02
+Prediction: ../4D-Humans/demo_out/my_image/00009_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria02.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00009_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria02.obj
+--------------------------------------------------------------
+Raw MPJPE:              1865.17 mm
+Root-aligned MPJPE:     182.22 mm
+PA-MPJPE:               55.72 mm
+Global root drift:      1.8716 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
+
+################################################################
+Model: 4DHumans
+Frame: 00010
+Prediction frame files: ../4D-Humans/demo_out/my_image/00010_*.obj
+GT frame dir: ./data/mesh_cam/cam01/rgb/00010
+################################################################
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "bool"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:96: DeprecationWarning: `np.int` is a deprecated alias for the builtin `int`. To silence this warning, use `int` by itself. Doing this will not modify any behavior and is safe. When replacing `np.int`, you may wish to use e.g. `np.int64` or `np.int32` to specify the precision. If you wish to review your current use, check the release note link for additional information.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "int"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:98: DeprecationWarning: `np.float` is a deprecated alias for the builtin `float`. To silence this warning, use `float` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.float64` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "float"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:100: DeprecationWarning: `np.complex` is a deprecated alias for the builtin `complex`. To silence this warning, use `complex` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.complex128` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "complex"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:102: DeprecationWarning: `np.object` is a deprecated alias for the builtin `object`. To silence this warning, use `object` by itself. Doing this will not modify any behavior and is safe. 
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "object"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:104: DeprecationWarning: `np.str` is a deprecated alias for the builtin `str`. To silence this warning, use `str` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "str"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:106: DeprecationWarning: `np.unicode` is a deprecated alias for `np.compat.unicode`. To silence this warning, use `np.compat.unicode` by itself. In the likely event your code does not need to work on Python 2 you can use the builtin `str` for which `np.compat.unicode` is itself an alias. Doing this will not modify any behaviour and is safe. If you specifically wanted the numpy scalar type, use `np.str_` here.
+Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
+  if not hasattr(np, "unicode"):
+/home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:118: DeprecationWarning: Please import `csc_matrix` from the `scipy.sparse` namespace; the `scipy.sparse.csc` namespace is deprecated and will be removed in SciPy 2.0.0.
+  smpl_data = pickle.load(f, encoding="latin1")
+[SMPL] Loaded J_regressor from: smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+[SMPL] J_regressor shape: (24, 6890)
+
+Loading prediction meshes for auto matching:
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00010_0.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00010_1.obj
+[Prediction] Loading OBJ: ../4D-Humans/demo_out/my_image/00010_2.obj
+
+Loading GT meshes for auto matching:
+
+---------- AUTO IDENTITY MATCHING ----------
+Matching criterion: minimum total root-aligned SMPL-joint MPJPE
+Prediction det ids: ['0', '1', '2']
+GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
+
+Pairwise root-aligned MPJPE matrix, mm
+Rows = prediction det_id, columns = GT person
+[[372.31113 418.50305 186.94273 414.0962 ]
+ [229.52759 278.16132 407.98203 181.03639]
+ [172.2296  225.08945 378.96262 279.7834 ]]
+
+Best total matching score: 540.21 mm
+
+Auto detection-to-GT identity mapping:
+  det 0 -> aria03
+  det 1 -> aria04
+  det 2 -> aria01
+--------------------------------------------
+
+############################################################
+Frame: 00010
+TokenHMR detection id: 0
+Auto-matched GT person: aria03
+Prediction: ../4D-Humans/demo_out/my_image/00010_0.obj
+Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria03.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00010_0.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria03.obj
+--------------------------------------------------------------
+Raw MPJPE:              1344.19 mm
+Root-aligned MPJPE:     186.94 mm
+PA-MPJPE:               73.73 mm
+Global root drift:      1.3237 m
+==============================================================
+
+############################################################
+Frame: 00010
+TokenHMR detection id: 1
+Auto-matched GT person: aria04
+Prediction: ../4D-Humans/demo_out/my_image/00010_1.obj
+Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria04.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00010_1.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria04.obj
+--------------------------------------------------------------
+Raw MPJPE:              1523.47 mm
+Root-aligned MPJPE:     181.04 mm
+PA-MPJPE:               92.62 mm
+Global root drift:      1.5287 m
+==============================================================
+
+############################################################
+Frame: 00010
+TokenHMR detection id: 2
+Auto-matched GT person: aria01
+Prediction: ../4D-Humans/demo_out/my_image/00010_2.obj
+Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria01.obj
+############################################################
+
+================ SMPL-Regressed Joint Metrics ================
+Prediction: ../4D-Humans/demo_out/my_image/00010_2.obj
+Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria01.obj
+--------------------------------------------------------------
+Raw MPJPE:              3857.38 mm
+Root-aligned MPJPE:     172.23 mm
+PA-MPJPE:               120.54 mm
+Global root drift:      3.9379 m
+==============================================================
+
+Important:
+- Detection ids are not assumed to be stable across frames.
+- Matching is recomputed independently for each frame.
+- Matching uses root-aligned joints, so it is less affected by global depth drift.
+- Raw MPJPE/root drift are still meaningful only if both meshes are in the same camera coordinate frame.
+- PA-MPJPE is safer when coordinate alignment is uncertain.
