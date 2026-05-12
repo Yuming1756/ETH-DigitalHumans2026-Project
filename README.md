@@ -145,23 +145,23 @@ data/
 ```
 The local data/ folder should be copied from the shared course directory as follows:
 
-'''text
+```text
 data/colmap   <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/colmap
 data/ego      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/ego
 data/exo      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/exo
 data/mesh_cam <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/mesh_cam
 data/poses2d  <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/poses2d
-'''
+```
 
 ### 3. TokenHMR outputs
 Copy the TokenHMR prediction outputs from:
-'''text
+```text
 /work/courses/digital_human/team6/TokenHMR/demo_out/my_image
-'''
+```
 to:
-'''text
+```text
 TokenHMR/demo_out/my_image/
-'''
+```
 
 Expected example files:
 ```text
@@ -176,13 +176,13 @@ TokenHMR/demo_out/my_image_smplify_adam/
 
 ### 4. 4D-Humans outputs
 Copy the 4D-Humans prediction outputs from:
-'''text
+```text
 /work/courses/digital_human/team6/4D-Humans/demo_out/my_image
-'''
+```
 to:
-'''text
+```text
 4D-Humans/demo_out/my_image/
-'''
+```
 
 Expected example files:
 
