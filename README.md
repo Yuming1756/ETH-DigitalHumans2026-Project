@@ -222,7 +222,7 @@ For 4D-Humans:
 ```bash
 ./visualize_smplify_frame.sh 00001 4dhumans lbfgs
 ```
-6. Evaluate optimized meshes
+### 6. Evaluate optimized meshes
 
 Use the following command:
 
