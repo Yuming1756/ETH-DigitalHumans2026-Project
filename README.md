@@ -28,17 +28,63 @@ Project/
 ├── data/
 │   ├── README.md
 │   ├── colmap/
+│   │   └── ...
+│   │
 │   ├── ego/
+│   │   ├── aria01/
+│   │   │   ├── calib/
+│   │   │   ├── images/
+│   │   │   └── undistort_map.npz
+│   │   ├── aria02/
+│   │   │   ├── calib/
+│   │   │   ├── images/
+│   │   │   └── undistort_map.npz
+│   │   ├── aria03/
+│   │   │   ├── calib/
+│   │   │   ├── images/
+│   │   │   └── undistort_map.npz
+│   │   └── aria04/
+│   │       ├── calib/
+│   │       ├── images/
+│   │       └── undistort_map.npz
+│   │
 │   ├── exo/
+│   │   └── cam01/
+│   │       └── undistorted_images/
+│   │           ├── 00001.jpg
+│   │           ├── 00002.jpg
+│   │           ├── 00003.jpg
+│   │           ├── 00004.jpg
+│   │           └── ...
+│   │
 │   ├── mesh_cam/
 │   │   └── cam01/
 │   │       └── rgb/
-│   │           └── 00001/
-│   │               ├── mesh_aria01.obj
-│   │               ├── mesh_aria02.obj
-│   │               ├── mesh_aria03.obj
-│   │               └── mesh_aria04.obj
+│   │           ├── 00001/
+│   │           │   ├── mesh_aria01.obj
+│   │           │   ├── mesh_aria02.obj
+│   │           │   ├── mesh_aria03.obj
+│   │           │   └── mesh_aria04.obj
+│   │           ├── 00002/
+│   │           │   ├── mesh_aria01.obj
+│   │           │   ├── mesh_aria02.obj
+│   │           │   ├── mesh_aria03.obj
+│   │           │   └── mesh_aria04.obj
+│   │           └── ...
+│   │
 │   └── poses2d/
+│       ├── aria01/
+│       │   ├── left/
+│       │   ├── rgb/
+│       │   └── right/
+│       ├── aria02/
+│       ├── aria03/
+│       ├── aria04/
+│       └── cam01/
+│           └── rgb/
+│               ├── 00001.npy
+│               ├── 00002.npy
+│               └── ...
 │
 ├── head_targets/
 │   ├── README.md
@@ -58,7 +104,6 @@ Project/
 │   └── visualize_frame_before_after_all_people.py
 │
 ├── TokenHMR/
-│   ├── README.md
 │   └── demo_out/
 │       ├── README.md
 │       ├── my_image/
@@ -67,7 +112,6 @@ Project/
 │       └── my_image_smplify_v1/
 │
 ├── 4D-Humans/
-│   ├── README.md
 │   └── demo_out/
 │       ├── README.md
 │       ├── my_image/
@@ -86,7 +130,7 @@ Project/
 
 ### 1. SMPL model
 
-Place the SMPL model file here:
+Place the SMPL model file (basicModel_neutral_lbs_10_207_0_v1.0.0.pkl) here:
 
 ```text
 smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
@@ -99,16 +143,16 @@ Place EgoHumans data under:
 ```text
 data/
 ```
-The ground-truth camera-space meshes should follow this structure:
-```text
-data/mesh_cam/cam01/rgb/<frame>/mesh_ariaXX.obj
-```
+1. The data/colmap should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/colmap
+2. The data/ego should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/ego
+3. The data/exo should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/exo
+4. The data/mesh_cam should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/mesh_cam
+5. The data/poses2d should be the copy of the /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/poses2d
+
 
 ### 3. TokenHMR outputs
-Place TokenHMR prediction outputs here:
-```text
-TokenHMR/demo_out/my_image/
-```
+Copy /work/courses/digital_human/team6/TokenHMR/demo_out/my_image to TokenHMR/demo_out/my_image/
+
 Expected example files:
 ```text
 TokenHMR/demo_out/my_image/00001_0.obj
@@ -121,11 +165,9 @@ TokenHMR/demo_out/my_image_smplify_adam/
 ```
 
 ### 4. 4D-Humans outputs
-Place 4D-Humans prediction outputs here:
-```text
-4D-Humans/demo_out/my_image/
-```
+Copy /work/courses/digital_human/team6/4D-Humans/demo_out/my_image to 4D-Humans/demo_out/my_image/
 Expected example files:
+
 ```text
 4D-Humans/demo_out/my_image/00001_0.obj
 4D-Humans/demo_out/my_image/00001_0_4dhumans.npz
