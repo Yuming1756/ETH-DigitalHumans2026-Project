@@ -115,6 +115,17 @@ def parse_point_file(path):
 
     return np.asarray(vals[:3], dtype=np.float32)
 
+def parse_mapping(mapping_str):
+    mapping = {}
+    for pair in mapping_str.split(","):
+        det, aria = pair.split(":")
+        det = int(det.strip())
+        aria = aria.strip()
+        if not aria.startswith("aria"):
+            aria = "aria" + aria
+        mapping[det] = aria
+    return mapping
+
 
 def camera_to_mesh_cam(points):
     points = np.asarray(points, dtype=np.float32).copy()
@@ -154,6 +165,9 @@ def main():
     parser.add_argument("--save_html", default="frame_before_after_all_people.html")
     parser.add_argument("--opacity", type=float, default=0.35)
     parser.add_argument("--draw_lines", action="store_true")
+    parser.add_argument("--mapping", default="0:aria03,1:aria02,2:aria01,3:aria04",
+        help='Detection-to-GT mapping, e.g. "0:aria03,1:aria02,2:aria01,3:aria04"',
+    )
 
     args = parser.parse_args()
 
@@ -164,12 +178,7 @@ def main():
     save_html = Path(args.save_html).expanduser()
 
     # detection id -> EgoHumans identity
-    mapping = {
-        0: "aria03",
-        1: "aria02",
-        2: "aria01",
-        3: "aria04",
-    }
+    mapping = parse_mapping(args.mapping)
 
     # Same color per identity, different shade by before/after/GT
     identity_colors = {

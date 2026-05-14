@@ -240,12 +240,12 @@ These targets are used by the optimization step.
 
 For TokenHMR:
 ```text
-./run_smplify_frame.sh 00001 tokenhmr lbfgs
+./run_smplify_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
 
 For 4D-Humans:
 ```text
-./run_smplify_frame.sh 00001 4dhumans lbfgs
+./run_smplify_frame.sh 00001 4dhumans adam "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
 
 Arguments:
@@ -253,12 +253,14 @@ Arguments:
 1st argument: frame ID, e.g. 00001
 2nd argument: model name, tokenhmr or 4dhumans
 3rd argument: optimizer, lbfgs or adam
+4th argument: detection-to-Aria correspondence, e.g.,
+              "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
 
 Optimized meshes are saved to:
 ```text
-TokenHMR/demo_out/my_image_smplify_lbfgs/
-4D-Humans/demo_out/my_image_smplify_lbfgs/
+TokenHMR/demo_out/my_image_smplify_adam/
+4D-Humans/demo_out/my_image_smplify_adam/
 ```
 ### 4. Visualize baseline predictions
 
@@ -276,11 +278,11 @@ For 4D-Humans:
 
 For TokenHMR:
 ```bash
-./visualize_smplify_frame.sh 00001 tokenhmr lbfgs
+./visualize_smplify_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
 For 4D-Humans:
 ```bash
-./visualize_smplify_frame.sh 00001 4dhumans lbfgs
+./visualize_smplify_frame.sh 00001 4dhumans adam "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
 ### 6. Evaluate optimized meshes
 

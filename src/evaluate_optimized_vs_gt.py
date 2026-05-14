@@ -238,10 +238,10 @@ def main():
     smpl_model_dir = Path(args.smpl_model_dir)
 
     if args.out_csv is None:
-        args.out_csv = f"metrics_{args.model}_{args.optimizer}_optimized_vs_gt.csv"
+        args.out_csv = f"metrics_{args.frame}_{args.model}_{args.optimizer}_optimized_vs_gt.csv"
 
     if args.summary_csv is None:
-        args.summary_csv = f"metrics_{args.model}_{args.optimizer}_optimized_vs_gt_summary.csv"
+        args.summary_csv = f"metrics_{args.frame}_{args.model}_{args.optimizer}_optimized_vs_gt_summary.csv"
 
     out_csv = Path(args.out_csv)
     summary_csv = Path(args.summary_csv)

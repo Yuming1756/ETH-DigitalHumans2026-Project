@@ -5,18 +5,21 @@ set -e
 cd "$(dirname "$0")" || exit 1
 
 # Usage:
-#   ./run_smplify_all_people.sh 00001 tokenhmr lbfgs
-#   ./run_smplify_all_people.sh 00001 tokenhmr adam
-#   ./run_smplify_all_people.sh 00001 4dhumans lbfgs
+#   ./run_smplify_frame.sh 00001 tokenhmr lbfgs
+#   ./run_smplify_frame.sh 00001 tokenhmr adam
+#   ./run_smplify_frame.sh 00002 tokenhmr adam "0:aria02,1:aria03,2:aria04,3:aria01"
+#   ./run_smplify_frame.sh 00001 4dhumans lbfgs
 #
 # Defaults:
 #   FRAME=00001
 #   MODEL=tokenhmr
 #   OPTIMIZER=lbfgs
+#   MAPPING=0:aria03,1:aria02,2:aria01,3:aria04
 
 FRAME=${1:-00001}
 MODEL=${2:-tokenhmr}
 OPTIMIZER=${3:-lbfgs}
+MAPPING=${4:-"0:aria03,1:aria02,2:aria01,3:aria04"}
 
 TARGET_DIR=./head_targets
 SMPL=./smpl
@@ -44,6 +47,7 @@ case "$OPTIMIZER" in
     echo "Usage:"
     echo "  $0 00001 tokenhmr lbfgs"
     echo "  $0 00001 tokenhmr adam"
+    echo "  $0 00002 tokenhmr adam \"0:aria02,1:aria03,2:aria04,3:aria01\""
     echo "  $0 00001 4dhumans lbfgs"
     exit 1
     ;;
@@ -79,6 +83,28 @@ esac
 
 mkdir -p "$OUT_DIR"
 
+# ------------------------------------------------------------
+# Parse detection-id to EgoHumans identity mapping
+# Example:
+#   MAPPING="0:aria02,1:aria03,2:aria04,3:aria01"
+# ------------------------------------------------------------
+declare -A MAP
+
+IFS=',' read -ra PAIRS <<< "$MAPPING"
+for PAIR in "${PAIRS[@]}"; do
+    DET_ID="${PAIR%%:*}"
+    ARIA="${PAIR#*:}"
+
+    DET_ID="$(echo "$DET_ID" | xargs)"
+    ARIA="$(echo "$ARIA" | xargs)"
+
+    if [[ "$ARIA" != aria* ]]; then
+        ARIA="aria${ARIA}"
+    fi
+
+    MAP[$DET_ID]="$ARIA"
+done
+
 echo "============================================================"
 echo "Optimizing all people"
 echo "Model: $MODEL_NAME"
@@ -90,6 +116,11 @@ echo "Output dir: $OUT_DIR"
 echo "Target dir: $TARGET_DIR"
 echo "Exo cam: $EXO_CAM"
 echo "SMPL dir: $SMPL"
+echo "Mapping string: $MAPPING"
+echo "Parsed mapping:"
+for DET_ID in 0 1 2 3; do
+    echo "  det $DET_ID -> ${MAP[$DET_ID]}"
+done
 echo "============================================================"
 
 if [ ! -d "$PRED_DIR" ]; then
@@ -98,15 +129,14 @@ if [ ! -d "$PRED_DIR" ]; then
     exit 1
 fi
 
-# detection id -> EgoHumans identity
-declare -A MAP
-MAP[0]=aria03
-MAP[1]=aria02
-MAP[2]=aria01
-MAP[3]=aria04
-
 for DET_ID in 0 1 2 3; do
     ARIA=${MAP[$DET_ID]}
+
+    if [ -z "$ARIA" ]; then
+        echo "[ERROR] No Aria identity specified for detection id $DET_ID"
+        echo "Mapping was: $MAPPING"
+        exit 1
+    fi
 
     PRED_NPZ="$PRED_DIR/${FRAME}_${DET_ID}${NPZ_SUFFIX}"
     PRED_OBJ="$PRED_DIR/${FRAME}_${DET_ID}.obj"
@@ -160,7 +190,8 @@ for DET_ID in 0 1 2 3; do
       --out_obj "$OUT_OBJ" \
       $OPT_ARGS \
       --w_head 5.0 \
-      --w_trans_prior 0.1
+      --w_trans_prior 1.0\
+      --w_z_positive 5.0
 done
 
 echo

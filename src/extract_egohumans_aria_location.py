@@ -5,60 +5,114 @@ import numpy as np
 
 
 def qvec_to_rotmat(qvec):
+    """
+    COLMAP quaternion format: qw, qx, qy, qz.
+    Returns world-to-camera rotation matrix.
+    """
     qw, qx, qy, qz = qvec
+
     return np.array([
         [
-            1 - 2 * qy**2 - 2 * qz**2,
-            2 * qx * qy - 2 * qz * qw,
-            2 * qx * qz + 2 * qy * qw,
+            1 - 2 * qy * qy - 2 * qz * qz,
+            2 * qx * qy - 2 * qw * qz,
+            2 * qx * qz + 2 * qw * qy,
         ],
         [
-            2 * qx * qy + 2 * qz * qw,
-            1 - 2 * qx**2 - 2 * qz**2,
-            2 * qy * qz - 2 * qx * qw,
+            2 * qx * qy + 2 * qw * qz,
+            1 - 2 * qx * qx - 2 * qz * qz,
+            2 * qy * qz - 2 * qw * qx,
         ],
         [
-            2 * qx * qz - 2 * qy * qw,
-            2 * qy * qz + 2 * qx * qw,
-            1 - 2 * qx**2 - 2 * qy**2,
+            2 * qx * qz - 2 * qw * qy,
+            2 * qy * qz + 2 * qw * qx,
+            1 - 2 * qx * qx - 2 * qy * qy,
         ],
     ], dtype=np.float64)
 
 
-def load_colmap_image_extrinsic(images_txt, image_name):
+def load_colmap_image_extrinsic(images_txt, image_name, allow_nearest=True):
     """
-    Read COLMAP images.txt.
+    Load COLMAP world-to-camera extrinsic for image_name.
 
-    COLMAP line:
-      IMAGE_ID qw qx qy qz tx ty tz CAMERA_ID NAME
+    If exact image_name is missing and allow_nearest=True, use the closest
+    timestamp for the same camera folder, e.g. cam01/00001.jpg for cam01/00002.jpg.
 
-    This is world-to-camera:
-      x_cam = R @ x_world + t
+    Returns:
+        T_cam_from_colmap: 4x4 world-to-camera matrix
+        used_image_name: the COLMAP image actually used
     """
     images_txt = Path(images_txt).expanduser()
+
+    target_cam = image_name.split("/")[0]
+    target_frame_str = Path(image_name).stem
+    target_frame = int(target_frame_str)
+
+    exact_match = None
+    candidates = []
 
     with open(images_txt, "r") as f:
         lines = f.readlines()
 
+    # COLMAP images.txt has image info on non-comment odd lines,
+    # followed by a 2D-points line. We can simply parse every non-comment
+    # line with at least 10 fields.
     for line in lines:
         line = line.strip()
+
         if not line or line.startswith("#"):
             continue
 
         parts = line.split()
-        if len(parts) >= 10 and parts[-1] == image_name:
+
+        # Image metadata line:
+        # IMAGE_ID QW QX QY QZ TX TY TZ CAMERA_ID NAME
+        if len(parts) < 10:
+            continue
+
+        try:
+            image_id = int(parts[0])
             qvec = np.array([float(x) for x in parts[1:5]], dtype=np.float64)
             tvec = np.array([float(x) for x in parts[5:8]], dtype=np.float64)
+            camera_id = int(parts[8])
+            name = parts[9]
+        except ValueError:
+            # This is probably a 2D point line, skip it.
+            continue
 
-            R = qvec_to_rotmat(qvec)
+        if name == image_name:
+            exact_match = (qvec, tvec, name)
+            break
 
-            T = np.eye(4, dtype=np.float64)
-            T[:3, :3] = R
-            T[:3, 3] = tvec
+        cam_name = name.split("/")[0]
+        if cam_name == target_cam:
+            try:
+                frame_num = int(Path(name).stem)
+            except ValueError:
+                continue
 
-            return T
+            candidates.append((abs(frame_num - target_frame), frame_num, qvec, tvec, name))
 
-    raise FileNotFoundError(f"Could not find {image_name} in {images_txt}")
+    if exact_match is not None:
+        qvec, tvec, used_name = exact_match
+    else:
+        if not allow_nearest or len(candidates) == 0:
+            raise FileNotFoundError(f"Could not find {image_name} in {images_txt}")
+
+        candidates.sort(key=lambda x: x[0])
+        _, used_frame, qvec, tvec, used_name = candidates[0]
+
+        print(
+            f"[Warning] Exact COLMAP image pose not found: {image_name}. "
+            f"Using nearest pose instead: {used_name}"
+        )
+
+    R = qvec_to_rotmat(qvec)
+
+    T = np.eye(4, dtype=np.float64)
+    T[:3, :3] = R
+    T[:3, 3] = tvec
+
+    return T, used_name
 
 
 def load_colmap_from_aria(data_root):
@@ -255,7 +309,14 @@ def main():
     # Same as ExoCamera.update:
     # raw_extrinsics = cam01_colmap_from_colmap_world
     # exo_extrinsics = raw_extrinsics @ primary_transform
-    T_exo_from_colmap = load_colmap_image_extrinsic(images_txt, image_name)
+    T_exo_from_colmap, used_colmap_image = load_colmap_image_extrinsic(
+        images_txt,
+        image_name,
+        allow_nearest=True,
+    )
+
+    print(f"Requested COLMAP image: {image_name}")
+    print(f"Used COLMAP image:      {used_colmap_image}")
     T_exo_from_anchor_world = T_exo_from_colmap @ primary_transform
 
     # Express Aria points in cam01 positive-Z camera coordinate.
