@@ -236,7 +236,7 @@ head_targets/00001_aria03_cam01_egohumans_style.txt
 
 These targets are used by the optimization step.
 
-### 3. Run optimization
+### 3. Run optimization (V1 - Translation Only)
 
 For TokenHMR:
 ```text
@@ -262,7 +262,22 @@ Optimized meshes are saved to:
 TokenHMR/demo_out/my_image_smplify_adam/
 4D-Humans/demo_out/my_image_smplify_adam/
 ```
-### 4. Visualize baseline predictions
+
+### 4. Run Optimization with 2d keypoints (V2 - SMPL Params jointly with global Rotation and Translation)
+Apart from all the dependencies up to now, you need SMPL's torch layer
+
+```pip install smplx```
+
+Optionally, you can also run the following to setup the full conda environment required for this step if you are missing multiple dependencies
+
+``` bash setup_conda_env.sh```
+
+Run optimization through `run_smplify_kp2d_per_frame.sh`. An example invocation is below
+
+```./run_smplify_kp2d_per_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04" ```
+
+
+### 5. Visualize baseline predictions
 
 For TokenHMR:
 ```bash
@@ -274,7 +289,7 @@ For 4D-Humans:
 ./visualize_baseline_vs_egohumans.sh 00001 4dhumans
 ```
 
-### 5. Visualize before and after optimization
+### 6. Visualize before and after optimization
 
 For TokenHMR:
 ```bash
@@ -284,7 +299,7 @@ For 4D-Humans:
 ```bash
 ./visualize_smplify_frame.sh 00001 4dhumans adam "0:aria03,1:aria02,2:aria01,3:aria04"
 ```
-### 6. Evaluate optimized meshes
+### 7. Evaluate optimized meshes
 
 Use the following command:
 
