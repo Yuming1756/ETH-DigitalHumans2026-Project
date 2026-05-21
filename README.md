@@ -265,12 +265,15 @@ TokenHMR/demo_out/my_image_smplify_adam/
 
 ### 4. Run Optimization with 2d keypoints (V2 - SMPL Params jointly with global Rotation and Translation)
 Apart from all the dependencies up to now, you need SMPL's torch layer
+
 ```pip install smplx```
 
 Optionally, you can also run the following to setup the full conda environment required for this step if you are missing multiple dependencies
+
 ``` bash setup_conda_env.sh```
 
 Run optimization through `run_smplify_kp2d_per_frame.sh`. An example invocation is below
+
 ```./run_smplify_kp2d_per_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04" ```
 
 
