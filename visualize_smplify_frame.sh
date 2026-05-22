@@ -5,90 +5,108 @@ set -e
 cd "$(dirname "$0")" || exit 1
 
 # Usage:
-#   ./visualize_smplify_frame.sh 00001 tokenhmr lbfgs
-#   ./visualize_smplify_frame.sh 00001 tokenhmr adam
-#   ./visualize_smplify_frame.sh 00001 4dhumans lbfgs
-#   ./visualize_smplify_frame.sh 00002 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04"
+#   ./visualize_smplify_frame.sh
 #
-# Args:
-#   $1 = FRAME
-#   $2 = MODEL: tokenhmr or 4dhumans
-#   $3 = OPTIMIZER: lbfgs or adam
-#   $4 = optional det-to-aria mapping
+# This visualizes:
+#   baseline model prediction
+#   SMPLify-v1 optimized prediction
+#   EgoHumans GT
 #
-# Defaults:
-#   FRAME=00001
-#   MODEL=tokenhmr
-#   OPTIMIZER=lbfgs
-#   MAPPING="0:aria03,1:aria02,2:aria01,3:aria04"
-
-FRAME=${1:-00001}
-MODEL=${2:-tokenhmr}
-OPTIMIZER=${3:-lbfgs}
-MAPPING=${4:-"0:aria03,1:aria02,2:aria01,3:aria04"}
+# For:
+#   frames 00001 to 00006
+#   models tokenhmr and 4dhumans
+#
+# Outputs:
+#   visualizations/00001_TokenHMR_baseline_vs_v1_vs_GT.html
+#   visualizations/00001_4DHumans_baseline_vs_v1_vs_GT.html
+#   ...
 
 PROJECT_ROOT=~/DigitalHumans/Project
 
-GT_ROOT=~/DigitalHumans/data/01_tagging/001_tagging/processed_data/mesh_cam/cam01/rgb
-TARGET_DIR=~/DigitalHumans/head_targets
+GT_ROOT="$PROJECT_ROOT/data/mesh_cam_unscaled/cam01/rgb"
+TARGET_DIR="$PROJECT_ROOT/head_targets_unscaled"
+
 VIS_SCRIPT="$PROJECT_ROOT/src/visualize_frame_before_after_all_people.py"
 VIS_DIR="$PROJECT_ROOT/visualizations"
 
-case "$OPTIMIZER" in
-  adam|Adam|ADAM)
-    OPTIMIZER_NAME="adam"
-    ;;
-  lbfgs|LBFGS|L-BFGS|l-bfgs)
-    OPTIMIZER_NAME="lbfgs"
-    ;;
-  *)
-    echo "[ERROR] Unknown optimizer: $OPTIMIZER"
-    echo "Usage: $0 00001 tokenhmr lbfgs"
-    echo "       $0 00001 tokenhmr adam"
-    echo "       $0 00001 4dhumans lbfgs"
-    echo "       $0 00002 tokenhmr adam \"0:aria03,1:aria02,2:aria01,3:aria04\""
-    exit 1
-    ;;
-esac
-
-case "$MODEL" in
-  tokenhmr|TokenHMR|tkhmr)
-    MODEL_NAME="TokenHMR"
-    BEFORE_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image"
-    AFTER_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image_smplify_${OPTIMIZER_NAME}"
-    OUT_HTML="$VIS_DIR/${FRAME}_TokenHMR_before_after_${OPTIMIZER_NAME}.html"
-    ;;
-
-  4dhumans|4DHumans|4dh|4D)
-    MODEL_NAME="4DHumans"
-    BEFORE_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_real_intrinsics"
-    AFTER_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_real_intrinsics_smplify_${OPTIMIZER_NAME}"
-    OUT_HTML="$VIS_DIR/${FRAME}_4DHumans_before_after_${OPTIMIZER_NAME}.html"
-    ;;
-
-  *)
-    echo "[ERROR] Unknown model: $MODEL"
-    echo "Usage: $0 00001 tokenhmr lbfgs"
-    echo "       $0 00001 4dhumans lbfgs"
-    exit 1
-    ;;
-esac
-
 mkdir -p "$VIS_DIR"
 
-echo "============================================================"
-echo "Visualizing before/after optimization"
-echo "Model: $MODEL_NAME"
-echo "Frame: $FRAME"
-echo "Optimizer: $OPTIMIZER_NAME"
-echo "Mapping: $MAPPING"
-echo "Before dir: $BEFORE_DIR"
-echo "After dir: $AFTER_DIR"
-echo "GT root: $GT_ROOT"
-echo "Target dir: $TARGET_DIR"
-echo "Output HTML: $OUT_HTML"
-echo "============================================================"
+# ------------------------------------------------------------
+# Frame-specific detection-id to EgoHumans identity mapping
+# ------------------------------------------------------------
+get_mapping_for_frame() {
+    local FRAME="$1"
 
+    case "$FRAME" in
+      00001)
+        echo "0:aria03,1:aria02,2:aria01,3:aria04"
+        ;;
+      00002)
+        echo "0:aria02,1:aria03,2:aria04,3:aria01"
+        ;;
+      00003)
+        echo "0:aria03,1:aria02,2:aria04,3:aria01"
+        ;;
+      00004)
+        echo "0:aria03,1:aria04,2:aria02,3:aria01"
+        ;;
+      00005)
+        echo "0:aria03,1:aria04,2:aria02,3:aria01"
+        ;;
+      00006)
+        echo "0:aria04,1:aria03,2:aria02,3:aria01"
+        ;;
+      *)
+        echo "[ERROR] No mapping defined for frame $FRAME" >&2
+        exit 1
+        ;;
+    esac
+}
+
+# ------------------------------------------------------------
+# Model-specific directories
+# ------------------------------------------------------------
+get_model_config() {
+    local MODEL="$1"
+    local FRAME="$2"
+
+    case "$MODEL" in
+      tokenhmr)
+        MODEL_NAME="TokenHMR"
+
+        # Baseline prediction
+        # Use my_image if your baseline OBJ files are there.
+        # If you want the NPZ/SMPL-param version, change this to my_image_with_smpl_params.
+        BEFORE_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image"
+
+        # SMPLify-v1 optimized prediction
+        AFTER_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image_smplify_v1"
+
+        OUT_HTML="$VIS_DIR/${FRAME}_TokenHMR_baseline_vs_v1_vs_GT.html"
+        ;;
+
+      4dhumans)
+        MODEL_NAME="4DHumans"
+
+        # Baseline prediction
+        BEFORE_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image"
+
+        # SMPLify-v1 optimized prediction
+        AFTER_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_smplify_v1"
+
+        OUT_HTML="$VIS_DIR/${FRAME}_4DHumans_baseline_vs_v1_vs_GT.html"
+        ;;
+
+      *)
+        echo "[ERROR] Unknown model: $MODEL"
+        exit 1
+        ;;
+    esac
+}
+
+# ------------------------------------------------------------
+# Basic checks
+# ------------------------------------------------------------
 if [ ! -f "$VIS_SCRIPT" ]; then
     echo "[ERROR] Visualization Python script not found:"
     echo "$VIS_SCRIPT"
@@ -97,37 +115,78 @@ if [ ! -f "$VIS_SCRIPT" ]; then
     exit 1
 fi
 
-if [ ! -d "$BEFORE_DIR" ]; then
-    echo "[ERROR] Before directory not found:"
-    echo "$BEFORE_DIR"
+if [ ! -d "$GT_ROOT" ]; then
+    echo "[ERROR] GT root not found:"
+    echo "$GT_ROOT"
     exit 1
 fi
 
-if [ ! -d "$AFTER_DIR" ]; then
-    echo "[ERROR] After directory not found:"
-    echo "$AFTER_DIR"
-    echo
-    echo "Run optimization first, for example:"
-    echo "  ./run_smplify_all_people.sh $FRAME $MODEL_NAME $OPTIMIZER_NAME"
-    exit 1
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "[Warning] Target directory not found:"
+    echo "$TARGET_DIR"
+    echo "Continuing anyway, but target markers may be missing."
 fi
 
-if [ ! -d "$GT_ROOT/$FRAME" ]; then
-    echo "[ERROR] GT frame directory not found:"
-    echo "$GT_ROOT/$FRAME"
-    exit 1
-fi
+# ------------------------------------------------------------
+# Main loop: both models, frames 00001–00006
+# ------------------------------------------------------------
+for MODEL in tokenhmr 4dhumans; do
+    for FRAME in 00001 00002 00003 00004 00005 00006; do
+        get_model_config "$MODEL" "$FRAME"
+        MAPPING=$(get_mapping_for_frame "$FRAME")
 
-python "$VIS_SCRIPT" \
-  --frame "$FRAME" \
-  --before_dir "$BEFORE_DIR" \
-  --after_dir "$AFTER_DIR" \
-  --gt_root "$GT_ROOT" \
-  --target_dir "$TARGET_DIR" \
-  --mapping "$MAPPING" \
-  --draw_lines \
-  --save_html "$OUT_HTML"
+        echo
+        echo "============================================================"
+        echo "Visualizing baseline vs SMPLify-v1 vs EgoHumans GT"
+        echo "Model: $MODEL_NAME"
+        echo "Frame: $FRAME"
+        echo "Mapping: $MAPPING"
+        echo "Baseline dir: $BEFORE_DIR"
+        echo "SMPLify-v1 dir: $AFTER_DIR"
+        echo "GT root: $GT_ROOT"
+        echo "Target dir: $TARGET_DIR"
+        echo "Output HTML: $OUT_HTML"
+        echo "============================================================"
+
+        if [ ! -d "$BEFORE_DIR" ]; then
+            echo "[Warning] Baseline directory not found:"
+            echo "$BEFORE_DIR"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        if [ ! -d "$AFTER_DIR" ]; then
+            echo "[Warning] SMPLify-v1 directory not found:"
+            echo "$AFTER_DIR"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        if [ ! -d "$GT_ROOT/$FRAME" ]; then
+            echo "[Warning] GT frame directory not found:"
+            echo "$GT_ROOT/$FRAME"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        python "$VIS_SCRIPT" \
+          --frame "$FRAME" \
+          --before_dir "$BEFORE_DIR" \
+          --after_dir "$AFTER_DIR" \
+          --gt_root "$GT_ROOT" \
+          --target_dir "$TARGET_DIR" \
+          --mapping "$MAPPING" \
+          --draw_lines \
+          --save_html "$OUT_HTML"
+
+        echo
+        echo "Saved:"
+        echo "$OUT_HTML"
+    done
+done
 
 echo
-echo "Done. Open visualization:"
-echo "$OUT_HTML"
+echo "============================================================"
+echo "Done. Generated visualizations:"
+echo "============================================================"
+ls -lh "$VIS_DIR"/*_baseline_vs_v1_vs_GT.html 2>/dev/null || true

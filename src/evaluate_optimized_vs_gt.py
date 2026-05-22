@@ -4,9 +4,9 @@ import argparse
 import csv
 import pickle
 from pathlib import Path
+from itertools import permutations
 
 import numpy as np
-from itertools import permutations
 
 
 def load_obj_vertices(obj_path):
@@ -22,7 +22,9 @@ def load_obj_vertices(obj_path):
     vertices = np.asarray(vertices, dtype=np.float32)
 
     if vertices.shape != (6890, 3):
-        raise ValueError(f"Expected vertices shape (6890, 3), got {vertices.shape} from {obj_path}")
+        raise ValueError(
+            f"Expected vertices shape (6890, 3), got {vertices.shape} from {obj_path}"
+        )
 
     return vertices
 
@@ -38,7 +40,7 @@ def load_smpl_joint_regressor(smpl_model_dir):
     if not smpl_path.exists():
         raise FileNotFoundError(f"SMPL model file not found: {smpl_path}")
 
-    # Compatibility for old SMPL pickle files
+    # Compatibility for old SMPL pickle files.
     for name, value in {
         "bool": bool,
         "int": int,
@@ -62,7 +64,9 @@ def load_smpl_joint_regressor(smpl_model_dir):
     J_regressor = np.asarray(J_regressor, dtype=np.float32)
 
     if J_regressor.shape[1] != 6890:
-        raise ValueError(f"Expected J_regressor shape (?, 6890), got {J_regressor.shape}")
+        raise ValueError(
+            f"Expected J_regressor shape (?, 6890), got {J_regressor.shape}"
+        )
 
     print(f"[SMPL] Loaded: {smpl_path}")
     print(f"[SMPL] J_regressor shape: {J_regressor.shape}")
@@ -79,6 +83,11 @@ def mean_l2_error(pred, gt):
 
 
 def procrustes_align(pred, gt):
+    """
+    Similarity Procrustes alignment:
+        pred -> gt
+    Used for PA-MPJPE.
+    """
     X = pred.astype(np.float64)
     Y = gt.astype(np.float64)
 
@@ -105,7 +114,13 @@ def procrustes_align(pred, gt):
     return X_aligned.astype(np.float32)
 
 
-def compute_metrics(pred_vertices, gt_vertices, J_regressor, root_index=0, unit_scale_to_mm=1000.0):
+def compute_metrics(
+    pred_vertices,
+    gt_vertices,
+    J_regressor,
+    root_index=0,
+    unit_scale_to_mm=1000.0,
+):
     pred_joints = vertices_to_joints(pred_vertices, J_regressor)
     gt_joints = vertices_to_joints(gt_vertices, J_regressor)
 
@@ -118,7 +133,9 @@ def compute_metrics(pred_vertices, gt_vertices, J_regressor, root_index=0, unit_
     pred_pa = procrustes_align(pred_joints, gt_joints)
     pa_mpjpe = mean_l2_error(pred_pa, gt_joints)
 
-    root_drift = float(np.linalg.norm(pred_joints[root_index] - gt_joints[root_index]))
+    root_drift = float(
+        np.linalg.norm(pred_joints[root_index] - gt_joints[root_index])
+    )
 
     vertex_error = mean_l2_error(pred_vertices, gt_vertices)
 
@@ -131,13 +148,43 @@ def compute_metrics(pred_vertices, gt_vertices, J_regressor, root_index=0, unit_
     }
 
 
-def default_prediction_dir(project_root, model, optimizer):
-    if model.lower() in ["tokenhmr", "tkhmr"]:
-        return project_root / "TokenHMR" / "demo_out" / f"my_image_smplify_{optimizer}"
-    elif model.lower() in ["4dhumans", "4dh", "4d"]:
-        return project_root / "4D-Humans" / "demo_out" / f"my_image_smplify_{optimizer}"
+def default_prediction_dir(project_root, model, optimizer, method):
+    """
+    Select default optimized prediction folder.
+
+    method:
+        translation:
+            translation/head-target-only optimization
+            e.g. my_image_smplify_adam
+
+        2d:
+            translation + 2D reprojection optimization
+            e.g. my_image_smplify_2d_adam
+    """
+    model_lower = model.lower()
+    optimizer_lower = optimizer.lower()
+    method_lower = method.lower()
+
+    if method_lower in ["translation", "trans", "head", "head_only"]:
+        folder_name = f"my_image_smplify_{optimizer_lower}"
+
+    elif method_lower in ["2d", "reproj", "reprojection", "2d_reprojection"]:
+        folder_name = f"my_image_smplify_2d_{optimizer_lower}"
+
+    elif method_lower in ["2stage", "two_stage", "twostage"]:
+        folder_name = f"my_image_smplify_2stage_{optimizer_lower}"
+
     else:
-        raise ValueError(f"Unknown model: {model}")
+        raise ValueError(f"Unknown method: {method}")
+
+    if model_lower in ["tokenhmr", "tkhmr"]:
+        return project_root / "TokenHMR" / "demo_out" / folder_name
+
+    if model_lower in ["4dhumans", "4dh", "4d"]:
+        return project_root / "4D-Humans" / "demo_out" / folder_name
+
+    raise ValueError(f"Unknown model: {model}")
+
 
 def root_aligned_mpjpe_mm(pred_joints, gt_joints, root_index=0):
     pred_ra = pred_joints - pred_joints[root_index : root_index + 1]
@@ -208,40 +255,98 @@ def find_best_identity_mapping(pred_items, gt_items, root_index=0):
     return mapping, score_matrix, best_score
 
 
+def parse_frame_and_det_id(obj_path):
+    """
+    Supports names like:
+        00001_0.obj
+        00001_0_zero_beta.obj
+
+    Returns:
+        frame = "00001"
+        det_id = "0"
+    """
+    parts = obj_path.stem.split("_")
+
+    if len(parts) < 2:
+        raise ValueError(f"Cannot parse frame/detection id from: {obj_path.name}")
+
+    frame = parts[0]
+    det_id = parts[1]
+
+    return frame, det_id
+
+
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--frame", default=None, help="Evaluate one frame, e.g. 00001. If omitted, evaluate all frames found.")
+    parser.add_argument(
+        "--frame",
+        default=None,
+        help="Evaluate one frame, e.g. 00001. If omitted, evaluate all frames found.",
+    )
     parser.add_argument("--model", default="4dhumans", help="tokenhmr or 4dhumans")
-    parser.add_argument("--optimizer", default="lbfgs", help="lbfgs or adam")
-
-    parser.add_argument("--pred_dir", default=None, help="Directory containing optimized OBJ files")
-    parser.add_argument("--gt_root", default="./data/mesh_cam/cam01/rgb", help="GT root: data/mesh_cam/cam01/rgb")
-    parser.add_argument("--smpl_model_dir", default="./smpl", help="SMPL folder containing basicModel_neutral_lbs_10_207_0_v1.0.0.pkl")
+    parser.add_argument(
+        "--pred_dir",
+        default=None,
+        help="Directory containing optimized OBJ files. Overrides --model/--optimizer/--method default folder.",
+    )
+    parser.add_argument(
+        "--gt_root",
+        default="./data/mesh_cam_unscaled/cam01/rgb",
+        help="GT root, e.g. data/mesh_cam_unscaled/cam01/rgb",
+    )
+    parser.add_argument(
+        "--smpl_model_dir",
+        default="./smpl",
+        help="SMPL folder containing basicModel_neutral_lbs_10_207_0_v1.0.0.pkl",
+    )
 
     parser.add_argument("--out_csv", default=None, help="Output per-pair CSV")
     parser.add_argument("--summary_csv", default=None, help="Output summary CSV")
 
     parser.add_argument("--root_index", type=int, default=0)
     parser.add_argument("--unit_scale_to_mm", type=float, default=1000.0)
+    parser.add_argument(
+        "--method",
+        default="translation",
+        choices=["v1", "v2"],
+        help=(
+            "Which optimized results to evaluate. "
+            "'v1' uses my_image_smplify_<optimizer>; "
+            "'v2' uses my_image_smplify_v2_<optimizer>. "
+        ),
+    )
 
     args = parser.parse_args()
 
     project_root = Path(".").resolve()
 
     if args.pred_dir is None:
-        pred_dir = default_prediction_dir(project_root, args.model, args.optimizer)
+        pred_dir = default_prediction_dir(
+            project_root,
+            args.model,
+            args.optimizer,
+            args.method,
+        )
     else:
         pred_dir = Path(args.pred_dir)
 
     gt_root = Path(args.gt_root)
     smpl_model_dir = Path(args.smpl_model_dir)
 
+    frame_label = args.frame if args.frame is not None else "ALL"
+
     if args.out_csv is None:
-        args.out_csv = f"metrics_{args.frame}_{args.model}_{args.optimizer}_optimized_vs_gt.csv"
+        args.out_csv = (
+            f"metrics_{frame_label}_{args.model}_"
+            f"{args.method}_optimized_vs_gt.csv"
+        )
 
     if args.summary_csv is None:
-        args.summary_csv = f"metrics_{args.frame}_{args.model}_{args.optimizer}_optimized_vs_gt_summary.csv"
+        args.summary_csv = (
+            f"metrics_{frame_label}_{args.model}_"
+            f"{args.method}_optimized_vs_gt_summary.csv"
+        )
 
     out_csv = Path(args.out_csv)
     summary_csv = Path(args.summary_csv)
@@ -249,7 +354,7 @@ def main():
     print("============================================================")
     print("Evaluate optimized meshes against EgoHumans GT")
     print(f"Model: {args.model}")
-    print(f"Optimizer: {args.optimizer}")
+    print(f"Method: {args.method}")
     print(f"Frame: {args.frame if args.frame else 'ALL'}")
     print(f"Prediction dir: {pred_dir}")
     print(f"GT root: {gt_root}")
@@ -266,30 +371,29 @@ def main():
 
     J_regressor = load_smpl_joint_regressor(smpl_model_dir)
 
-    # detection id -> EgoHumans identity
     pred_files_all = sorted(pred_dir.glob("*.obj"))
     pred_files_all = [p for p in pred_files_all if "_all" not in p.stem]
 
     if args.frame is not None:
         pred_files_all = [
-            p for p in pred_files_all
+            p
+            for p in pred_files_all
             if p.stem.startswith(f"{args.frame}_")
         ]
 
     if len(pred_files_all) == 0:
         raise FileNotFoundError(f"No optimized OBJ files found in {pred_dir}")
 
-    # Group prediction files by frame
+    # Group prediction files by frame.
     frame_to_pred_files = {}
 
     for pred_obj in pred_files_all:
-        parts = pred_obj.stem.split("_")
-
-        if len(parts) < 2:
+        try:
+            frame, det_id = parse_frame_and_det_id(pred_obj)
+        except ValueError:
             print(f"[SKIP] Cannot parse frame/detection id from: {pred_obj.name}")
             continue
 
-        frame = parts[0]
         frame_to_pred_files.setdefault(frame, []).append(pred_obj)
 
     rows = []
@@ -303,7 +407,11 @@ def main():
 
         pred_files = sorted(
             frame_to_pred_files[frame],
-            key=lambda p: int(p.stem.split("_")[1]) if p.stem.split("_")[1].isdigit() else p.stem.split("_")[1],
+            key=lambda p: (
+                int(parse_frame_and_det_id(p)[1])
+                if parse_frame_and_det_id(p)[1].isdigit()
+                else parse_frame_and_det_id(p)[1]
+            ),
         )
 
         gt_dir = gt_root / frame
@@ -323,8 +431,7 @@ def main():
 
         print("\nLoading optimized prediction meshes:")
         for pred_obj in pred_files:
-            parts = pred_obj.stem.split("_")
-            det_id = parts[1]
+            _, det_id = parse_frame_and_det_id(pred_obj)
 
             pred_vertices = load_obj_vertices(pred_obj)
             pred_joints = vertices_to_joints(pred_vertices, J_regressor)
@@ -411,7 +518,7 @@ def main():
 
             row = {
                 "model": args.model,
-                "optimizer": args.optimizer,
+                "method": args.method,
                 "frame": frame,
                 "det_id": det_id,
                 "aria": aria,
@@ -451,6 +558,7 @@ def main():
 
     for key in metric_keys:
         values = np.asarray([r[key] for r in rows], dtype=np.float64)
+
         summary_rows.append(
             {
                 "metric": key,

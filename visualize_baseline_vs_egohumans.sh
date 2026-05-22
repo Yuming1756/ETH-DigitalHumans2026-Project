@@ -5,81 +5,188 @@ set -e
 cd "$(dirname "$0")" || exit 1
 
 # Usage:
-#   ./visualize_model_vs_egohumans.sh 00001 tokenhmr
-#   ./visualize_model_vs_egohumans.sh 00001 4dhumans
+#   ./visualize_smplify_frame.sh
 #
-# Defaults:
-#   FRAME=00001
-#   MODEL=tokenhmr
+# This visualizes:
+#   baseline model prediction
+#   SMPLify-v1 optimized prediction
+#   EgoHumans GT
+#
+# For:
+#   frames 00001 to 00006
+#   models tokenhmr and 4dhumans
+#
+# Outputs:
+#   visualizations/00001_TokenHMR_baseline_vs_v1_vs_GT.html
+#   visualizations/00001_4DHumans_baseline_vs_v1_vs_GT.html
+#   ...
 
-FRAME=${1:-00001}
-MODEL=${2:-tokenhmr}
+PROJECT_ROOT=~/DigitalHumans/Project
 
-SCRIPT=./src/visualize_baseline_vs_egohumans_mesh3d.py
-GT_ROOT=./data/mesh_cam/cam01/rgb
-MAPPING="0:aria03,1:aria02,2:aria01,3:aria04"
+GT_ROOT="$PROJECT_ROOT/data/mesh_cam_unscaled/cam01/rgb"
+TARGET_DIR="$PROJECT_ROOT/head_targets_unscaled"
 
-case "$MODEL" in
-  tokenhmr|TokenHMR|tkhmr)
-    MODEL_NAME="TokenHMR"
-    PRED_DIR=./TokenHMR/demo_out/my_image
-    OUT_HTML=./visualizations/${FRAME}_TokenHMR_vs_EgoHumans_mesh3d.html
-    ;;
+VIS_SCRIPT="$PROJECT_ROOT/src/visualize_frame_before_after_all_people.py"
+VIS_DIR="$PROJECT_ROOT/visualizations"
 
-  4dhumans|4DHumans|4dh|4D)
-    MODEL_NAME="4DHumans"
-    PRED_DIR=./4D-Humans/demo_out/my_image
-    OUT_HTML=./visualizations/${FRAME}_4DHumans_vs_EgoHumans_mesh3d.html
-    ;;
+mkdir -p "$VIS_DIR"
 
-  *)
-    echo "[ERROR] Unknown model: $MODEL"
-    echo "Usage:"
-    echo "  $0 00001 tokenhmr"
-    echo "  $0 00001 4dhumans"
-    exit 1
-    ;;
-esac
+# ------------------------------------------------------------
+# Frame-specific detection-id to EgoHumans identity mapping
+# ------------------------------------------------------------
+get_mapping_for_frame() {
+    local FRAME="$1"
 
-mkdir -p ./visualizations
+    case "$FRAME" in
+      00001)
+        echo "0:aria03,1:aria02,2:aria01,3:aria04"
+        ;;
+      00002)
+        echo "0:aria02,1:aria03,2:aria04,3:aria01"
+        ;;
+      00003)
+        echo "0:aria03,1:aria02,2:aria04,3:aria01"
+        ;;
+      00004)
+        echo "0:aria03,1:aria04,2:aria02,3:aria01"
+        ;;
+      00005)
+        echo "0:aria03,1:aria04,2:aria02,3:aria01"
+        ;;
+      00006)
+        echo "0:aria04,1:aria03,2:aria02,3:aria01"
+        ;;
+      *)
+        echo "[ERROR] No mapping defined for frame $FRAME" >&2
+        exit 1
+        ;;
+    esac
+}
 
-echo "============================================================"
-echo "Visualizing model vs EgoHumans"
-echo "Frame: $FRAME"
-echo "Model: $MODEL_NAME"
-echo "Pred dir: $PRED_DIR"
-echo "GT root: $GT_ROOT"
-echo "Output: $OUT_HTML"
-echo "============================================================"
+# ------------------------------------------------------------
+# Model-specific directories
+# ------------------------------------------------------------
+get_model_config() {
+    local MODEL="$1"
+    local FRAME="$2"
 
-if [ ! -f "$SCRIPT" ]; then
-    echo "[ERROR] Python visualization script not found:"
-    echo "$SCRIPT"
+    case "$MODEL" in
+      tokenhmr)
+        MODEL_NAME="TokenHMR"
+
+        # Baseline prediction
+        # Use my_image if your baseline OBJ files are there.
+        # If you want the NPZ/SMPL-param version, change this to my_image_with_smpl_params.
+        BEFORE_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image"
+
+        # SMPLify-v1 optimized prediction
+        AFTER_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image_smplify_v1"
+
+        OUT_HTML="$VIS_DIR/${FRAME}_TokenHMR_baseline_vs_v1_vs_GT.html"
+        ;;
+
+      4dhumans)
+        MODEL_NAME="4DHumans"
+
+        # Baseline prediction
+        BEFORE_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image"
+
+        # SMPLify-v1 optimized prediction
+        AFTER_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_smplify_v1"
+
+        OUT_HTML="$VIS_DIR/${FRAME}_4DHumans_baseline_vs_v1_vs_GT.html"
+        ;;
+
+      *)
+        echo "[ERROR] Unknown model: $MODEL"
+        exit 1
+        ;;
+    esac
+}
+
+# ------------------------------------------------------------
+# Basic checks
+# ------------------------------------------------------------
+if [ ! -f "$VIS_SCRIPT" ]; then
+    echo "[ERROR] Visualization Python script not found:"
+    echo "$VIS_SCRIPT"
+    echo
+    echo "You need visualize_frame_before_after_all_people.py first."
     exit 1
 fi
 
-if [ ! -d "$PRED_DIR" ]; then
-    echo "[ERROR] Prediction directory not found:"
-    echo "$PRED_DIR"
+if [ ! -d "$GT_ROOT" ]; then
+    echo "[ERROR] GT root not found:"
+    echo "$GT_ROOT"
     exit 1
 fi
 
-if [ ! -d "$GT_ROOT/$FRAME" ]; then
-    echo "[ERROR] GT frame directory not found:"
-    echo "$GT_ROOT/$FRAME"
-    exit 1
+if [ ! -d "$TARGET_DIR" ]; then
+    echo "[Warning] Target directory not found:"
+    echo "$TARGET_DIR"
+    echo "Continuing anyway, but target markers may be missing."
 fi
 
-python "$SCRIPT" \
-  --frame "$FRAME" \
-  --model "$MODEL" \
-  --pred_dir "$PRED_DIR" \
-  --gt_root "$GT_ROOT" \
-  --mapping "$MAPPING" \
-  --draw_centroid_lines \
-  --axis \
-  --save_html "$OUT_HTML"
+# ------------------------------------------------------------
+# Main loop: both models, frames 00001–00006
+# ------------------------------------------------------------
+for MODEL in tokenhmr 4dhumans; do
+    for FRAME in 00001 00002 00003 00004 00005 00006; do
+        get_model_config "$MODEL" "$FRAME"
+        MAPPING=$(get_mapping_for_frame "$FRAME")
+
+        echo
+        echo "============================================================"
+        echo "Visualizing baseline vs SMPLify-v1 vs EgoHumans GT"
+        echo "Model: $MODEL_NAME"
+        echo "Frame: $FRAME"
+        echo "Mapping: $MAPPING"
+        echo "Baseline dir: $BEFORE_DIR"
+        echo "SMPLify-v1 dir: $AFTER_DIR"
+        echo "GT root: $GT_ROOT"
+        echo "Target dir: $TARGET_DIR"
+        echo "Output HTML: $OUT_HTML"
+        echo "============================================================"
+
+        if [ ! -d "$BEFORE_DIR" ]; then
+            echo "[Warning] Baseline directory not found:"
+            echo "$BEFORE_DIR"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        if [ ! -d "$AFTER_DIR" ]; then
+            echo "[Warning] SMPLify-v1 directory not found:"
+            echo "$AFTER_DIR"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        if [ ! -d "$GT_ROOT/$FRAME" ]; then
+            echo "[Warning] GT frame directory not found:"
+            echo "$GT_ROOT/$FRAME"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        python "$VIS_SCRIPT" \
+          --frame "$FRAME" \
+          --before_dir "$BEFORE_DIR" \
+          --after_dir "$AFTER_DIR" \
+          --gt_root "$GT_ROOT" \
+          --target_dir "$TARGET_DIR" \
+          --mapping "$MAPPING" \
+          --draw_lines \
+          --save_html "$OUT_HTML"
+
+        echo
+        echo "Saved:"
+        echo "$OUT_HTML"
+    done
+done
 
 echo
-echo "Done. Open:"
-echo "$OUT_HTML"
+echo "============================================================"
+echo "Done. Generated visualizations:"
+echo "============================================================"
+ls -lh "$VIS_DIR"/*_baseline_vs_v1_vs_GT.html 2>/dev/null || true

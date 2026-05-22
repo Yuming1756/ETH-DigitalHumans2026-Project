@@ -6,7 +6,10 @@ cd "$(dirname "$0")" || exit 1
 
 DATA_ROOT=./data
 SMPL=./smpl
-TARGET_DIR=./head_targets
+
+# Use unscaled GT and save unscaled head targets.
+GT_TYPE=mesh_cam_unscaled
+TARGET_DIR=./head_targets_unscaled
 
 # Usage:
 #   ./extract_all_aria_targets.sh 00001 cam01
@@ -18,16 +21,17 @@ FRAME=${1:-00001}
 EXO_CAM=${2:-cam01}
 ANCHOR_ARIA=aria01
 
-GT_ROOT="$DATA_ROOT/mesh_cam/$EXO_CAM/rgb"
+GT_ROOT="$DATA_ROOT/$GT_TYPE/$EXO_CAM/rgb"
 
 mkdir -p "$TARGET_DIR"
 
 echo "============================================================"
-echo "Extracting EgoHumans-style Aria camera/head targets"
+echo "Extracting UNSCALED EgoHumans-style Aria camera/head targets"
 echo "DATA_ROOT: $DATA_ROOT"
 echo "FRAME: $FRAME"
 echo "EXO_CAM: $EXO_CAM"
 echo "ANCHOR_ARIA: $ANCHOR_ARIA"
+echo "GT_TYPE: $GT_TYPE"
 echo "TARGET_DIR: $TARGET_DIR"
 echo "GT_ROOT: $GT_ROOT"
 echo "============================================================"
@@ -35,6 +39,8 @@ echo "============================================================"
 if [ ! -d "$GT_ROOT/$FRAME" ]; then
     echo "[ERROR] GT frame directory not found:"
     echo "$GT_ROOT/$FRAME"
+    echo
+    echo "You probably need to generate/copy mesh_cam_unscaled first."
     exit 1
 fi
 
@@ -63,11 +69,12 @@ for ARIA in aria01 aria02 aria03 aria04; do
       --anchor_aria "$ANCHOR_ARIA" \
       --gt_obj "$GT_OBJ" \
       --smpl_model_dir "$SMPL" \
-      --save_target "$SAVE_TARGET"
+      --save_target "$SAVE_TARGET" \
+      --remove_colmap_scale
 done
 
 echo
-echo "Done. Saved targets to:"
+echo "Done. Saved UNSCALED targets to:"
 echo "$TARGET_DIR"
 
 echo

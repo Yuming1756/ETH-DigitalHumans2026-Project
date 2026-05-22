@@ -1,10 +1,10 @@
 ================ AUTO-MATCHED JOINT-RELATED BASELINE RESULTS ================
 Model: TokenHMR
 Prediction dir: ../TokenHMR/demo_out/my_image
-GT root: ./data/mesh_cam/cam01/rgb
+GT root: ./data/mesh_cam_unscaled/cam01/rgb
 SMPL model dir: ./smpl
 Output file: joint_baseline_TokenHMR_auto_matched.txt
-Generated at: Tue May 12 04:59:08 PM CST 2026
+Generated at: Sat May 16 03:16:46 AM CST 2026
 
 Identity matching:
   Per-frame auto matching by minimum root-aligned SMPL-joint MPJPE
@@ -15,7 +15,7 @@ Identity matching:
 Model: TokenHMR
 Frame: 00001
 Prediction frame files: ../TokenHMR/demo_out/my_image/00001_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00001
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00001
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -58,12 +58,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[305.53    488.53925 144.93681 489.58612]
- [354.1554  184.01743 490.7439  237.41794]
- [156.27003 410.7231  290.22162 321.3541 ]
- [255.83554 302.8064  444.55167 177.09999]]
+[[244.38184 415.5492   74.41809 417.04965]
+ [298.83585 118.92865 424.33337 169.40659]
+ [ 92.03402 342.8489  224.99413 251.07256]
+ [196.54214 241.28433 378.97623  91.31148]]
 
-Best total matching score: 662.32 mm
+Best total matching score: 376.69 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -77,17 +77,17 @@ Frame: 00001
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00001_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00001_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              921.93 mm
-Root-aligned MPJPE:     144.94 mm
-PA-MPJPE:               53.05 mm
-Global root drift:      0.9185 m
+Raw MPJPE:              125.73 mm
+Root-aligned MPJPE:     74.42 mm
+PA-MPJPE:               42.22 mm
+Global root drift:      0.1062 m
 ==============================================================
 
 ############################################################
@@ -95,17 +95,17 @@ Frame: 00001
 TokenHMR detection id: 1
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00001_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00001_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1650.59 mm
-Root-aligned MPJPE:     184.02 mm
-PA-MPJPE:               49.53 mm
-Global root drift:      1.6221 m
+Raw MPJPE:              119.30 mm
+Root-aligned MPJPE:     118.93 mm
+PA-MPJPE:               39.42 mm
+Global root drift:      0.0316 m
 ==============================================================
 
 ############################################################
@@ -113,17 +113,17 @@ Frame: 00001
 TokenHMR detection id: 2
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00001_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00001_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1567.65 mm
-Root-aligned MPJPE:     156.27 mm
-PA-MPJPE:               81.43 mm
-Global root drift:      1.5944 m
+Raw MPJPE:              591.35 mm
+Root-aligned MPJPE:     92.03 mm
+PA-MPJPE:               64.81 mm
+Global root drift:      0.5735 m
 ==============================================================
 
 ############################################################
@@ -131,17 +131,17 @@ Frame: 00001
 TokenHMR detection id: 3
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00001_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00001/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00001_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00001/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00001/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1785.70 mm
-Root-aligned MPJPE:     177.10 mm
-PA-MPJPE:               77.57 mm
-Global root drift:      1.8927 m
+Raw MPJPE:              189.42 mm
+Root-aligned MPJPE:     91.31 mm
+PA-MPJPE:               61.74 mm
+Global root drift:      0.1172 m
 ==============================================================
 
 Important:
@@ -155,7 +155,7 @@ Important:
 Model: TokenHMR
 Frame: 00002
 Prediction frame files: ../TokenHMR/demo_out/my_image/00002_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00002
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00002
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -198,12 +198,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[339.0378  179.19696 481.04333 256.446  ]
- [292.49765 480.9692  133.65233 464.46082]
- [242.8631  291.42145 432.66776 179.4198 ]
- [154.85425 381.03476 277.95508 304.97095]]
+[[286.37115  115.82196  417.00388  186.70451 ]
+ [231.74846  409.23587   65.088936 392.1956  ]
+ [185.95604  229.97658  368.7807    88.234375]
+ [ 82.04677  311.56995  213.07437  231.58888 ]]
 
-Best total matching score: 647.12 mm
+Best total matching score: 351.19 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria02
@@ -217,17 +217,17 @@ Frame: 00002
 TokenHMR detection id: 0
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00002_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00002_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1717.38 mm
-Root-aligned MPJPE:     179.20 mm
-PA-MPJPE:               55.38 mm
-Global root drift:      1.6926 m
+Raw MPJPE:              132.97 mm
+Root-aligned MPJPE:     115.82 mm
+PA-MPJPE:               44.08 mm
+Global root drift:      0.0361 m
 ==============================================================
 
 ############################################################
@@ -235,17 +235,17 @@ Frame: 00002
 TokenHMR detection id: 1
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00002_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00002_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              898.98 mm
-Root-aligned MPJPE:     133.65 mm
-PA-MPJPE:               47.40 mm
-Global root drift:      0.8938 m
+Raw MPJPE:              153.60 mm
+Root-aligned MPJPE:     65.09 mm
+PA-MPJPE:               37.72 mm
+Global root drift:      0.1357 m
 ==============================================================
 
 ############################################################
@@ -253,17 +253,17 @@ Frame: 00002
 TokenHMR detection id: 2
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00002_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00002_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1704.97 mm
-Root-aligned MPJPE:     179.42 mm
-PA-MPJPE:               70.52 mm
-Global root drift:      1.8022 m
+Raw MPJPE:              267.96 mm
+Root-aligned MPJPE:     88.23 mm
+PA-MPJPE:               56.12 mm
+Global root drift:      0.2021 m
 ==============================================================
 
 ############################################################
@@ -271,17 +271,17 @@ Frame: 00002
 TokenHMR detection id: 3
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00002_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00002/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00002_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00002/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00002/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1293.28 mm
-Root-aligned MPJPE:     154.85 mm
-PA-MPJPE:               70.07 mm
-Global root drift:      1.3167 m
+Raw MPJPE:              860.31 mm
+Root-aligned MPJPE:     82.05 mm
+PA-MPJPE:               55.76 mm
+Global root drift:      0.8450 m
 ==============================================================
 
 Important:
@@ -295,7 +295,7 @@ Important:
 Model: TokenHMR
 Frame: 00003
 Prediction frame files: ../TokenHMR/demo_out/my_image/00003_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00003
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00003
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -338,12 +338,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[301.81625 478.82355 141.20685 462.94226]
- [325.963   176.39891 479.03418 273.29504]
- [229.08789 291.55072 422.75882 194.55338]
- [166.10898 362.15186 283.4597  303.33112]]
+[[239.35513  406.99863   67.027756 386.43893 ]
+ [272.47897  113.537186 413.8638   199.57323 ]
+ [168.7479   230.64273  358.17334  102.67826 ]
+ [ 85.2783   289.22223  209.92325  220.23816 ]]
 
-Best total matching score: 678.27 mm
+Best total matching score: 368.52 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -357,17 +357,17 @@ Frame: 00003
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00003_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00003_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              881.14 mm
-Root-aligned MPJPE:     141.21 mm
-PA-MPJPE:               55.20 mm
-Global root drift:      0.8714 m
+Raw MPJPE:              176.72 mm
+Root-aligned MPJPE:     67.03 mm
+PA-MPJPE:               43.93 mm
+Global root drift:      0.1628 m
 ==============================================================
 
 ############################################################
@@ -375,17 +375,17 @@ Frame: 00003
 TokenHMR detection id: 1
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00003_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00003_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1690.64 mm
-Root-aligned MPJPE:     176.40 mm
-PA-MPJPE:               60.38 mm
-Global root drift:      1.6721 m
+Raw MPJPE:              123.48 mm
+Root-aligned MPJPE:     113.54 mm
+PA-MPJPE:               48.06 mm
+Global root drift:      0.0259 m
 ==============================================================
 
 ############################################################
@@ -393,17 +393,17 @@ Frame: 00003
 TokenHMR detection id: 2
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00003_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00003_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1730.98 mm
-Root-aligned MPJPE:     194.55 mm
-PA-MPJPE:               77.92 mm
-Global root drift:      1.8448 m
+Raw MPJPE:              247.38 mm
+Root-aligned MPJPE:     102.68 mm
+PA-MPJPE:               62.01 mm
+Global root drift:      0.1665 m
 ==============================================================
 
 ############################################################
@@ -411,17 +411,17 @@ Frame: 00003
 TokenHMR detection id: 3
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00003_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00003/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00003_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00003/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00003/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1458.73 mm
-Root-aligned MPJPE:     166.11 mm
-PA-MPJPE:               70.50 mm
-Global root drift:      1.4916 m
+Raw MPJPE:              694.31 mm
+Root-aligned MPJPE:     85.28 mm
+PA-MPJPE:               56.11 mm
+Global root drift:      0.6718 m
 ==============================================================
 
 Important:
@@ -435,7 +435,7 @@ Important:
 Model: TokenHMR
 Frame: 00004
 Prediction frame files: ../TokenHMR/demo_out/my_image/00004_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00004
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00004
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -478,12 +478,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[309.07394 472.44562 138.59917 419.34827]
- [188.46883 295.9696  384.09885 184.19206]
- [290.15738 173.42143 475.34195 281.93988]
- [154.77173 333.02484 286.18585 255.17538]]
+[[253.0832   402.9983    66.194405 346.73026 ]
+ [119.45036  234.9501   316.9842    88.68909 ]
+ [239.03346  112.13519  409.28995  213.31502 ]
+ [ 72.70988  261.09738  214.55241  165.6125  ]]
 
-Best total matching score: 650.98 mm
+Best total matching score: 339.73 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -497,17 +497,17 @@ Frame: 00004
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00004_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00004_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              903.44 mm
-Root-aligned MPJPE:     138.60 mm
-PA-MPJPE:               52.49 mm
-Global root drift:      0.8896 m
+Raw MPJPE:              168.41 mm
+Root-aligned MPJPE:     66.19 mm
+PA-MPJPE:               41.78 mm
+Global root drift:      0.1565 m
 ==============================================================
 
 ############################################################
@@ -515,17 +515,17 @@ Frame: 00004
 TokenHMR detection id: 1
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00004_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00004_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1840.24 mm
-Root-aligned MPJPE:     184.19 mm
-PA-MPJPE:               68.15 mm
-Global root drift:      1.9420 m
+Raw MPJPE:              140.33 mm
+Root-aligned MPJPE:     88.69 mm
+PA-MPJPE:               54.24 mm
+Global root drift:      0.0790 m
 ==============================================================
 
 ############################################################
@@ -533,17 +533,17 @@ Frame: 00004
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00004_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00004_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1834.72 mm
-Root-aligned MPJPE:     173.42 mm
-PA-MPJPE:               61.99 mm
-Global root drift:      1.8124 m
+Raw MPJPE:              201.14 mm
+Root-aligned MPJPE:     112.14 mm
+PA-MPJPE:               49.34 mm
+Global root drift:      0.1367 m
 ==============================================================
 
 ############################################################
@@ -551,17 +551,17 @@ Frame: 00004
 TokenHMR detection id: 3
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00004_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00004/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00004_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00004/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00004/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1720.54 mm
-Root-aligned MPJPE:     154.77 mm
-PA-MPJPE:               63.89 mm
-Global root drift:      1.7568 m
+Raw MPJPE:              427.37 mm
+Root-aligned MPJPE:     72.71 mm
+PA-MPJPE:               50.85 mm
+Global root drift:      0.4028 m
 ==============================================================
 
 Important:
@@ -575,7 +575,7 @@ Important:
 Model: TokenHMR
 Frame: 00005
 Prediction frame files: ../TokenHMR/demo_out/my_image/00005_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00005
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00005
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -618,12 +618,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[312.48172 449.91312 144.92065 398.17737]
- [202.23434 294.55817 373.45016 181.98856]
- [273.3364  171.59497 471.37585 283.76593]
- [157.66455 312.25015 290.044   240.51471]]
+[[256.451    381.88824   68.58398  325.47644 ]
+ [134.47786  233.2913   297.99817   85.843735]
+ [218.85004  111.1745   404.09116  215.91107 ]
+ [ 79.5253   243.14456  220.55138  154.61284 ]]
 
-Best total matching score: 656.17 mm
+Best total matching score: 345.13 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -637,17 +637,17 @@ Frame: 00005
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00005_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00005_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              895.35 mm
-Root-aligned MPJPE:     144.92 mm
-PA-MPJPE:               54.25 mm
-Global root drift:      0.8763 m
+Raw MPJPE:              185.16 mm
+Root-aligned MPJPE:     68.58 mm
+PA-MPJPE:               43.18 mm
+Global root drift:      0.1770 m
 ==============================================================
 
 ############################################################
@@ -655,17 +655,17 @@ Frame: 00005
 TokenHMR detection id: 1
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00005_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00005_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1788.27 mm
-Root-aligned MPJPE:     181.99 mm
-PA-MPJPE:               71.32 mm
-Global root drift:      1.8891 m
+Raw MPJPE:              189.65 mm
+Root-aligned MPJPE:     85.84 mm
+PA-MPJPE:               56.76 mm
+Global root drift:      0.1317 m
 ==============================================================
 
 ############################################################
@@ -673,17 +673,17 @@ Frame: 00005
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00005_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00005_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1849.98 mm
-Root-aligned MPJPE:     171.59 mm
-PA-MPJPE:               57.78 mm
-Global root drift:      1.8190 m
+Raw MPJPE:              199.37 mm
+Root-aligned MPJPE:     111.17 mm
+PA-MPJPE:               45.98 mm
+Global root drift:      0.1332 m
 ==============================================================
 
 ############################################################
@@ -691,17 +691,17 @@ Frame: 00005
 TokenHMR detection id: 3
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00005_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00005/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00005_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00005/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00005/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1742.75 mm
-Root-aligned MPJPE:     157.66 mm
-PA-MPJPE:               75.02 mm
-Global root drift:      1.7897 m
+Raw MPJPE:              405.44 mm
+Root-aligned MPJPE:     79.53 mm
+PA-MPJPE:               59.71 mm
+Global root drift:      0.3729 m
 ==============================================================
 
 Important:
@@ -715,7 +715,7 @@ Important:
 Model: TokenHMR
 Frame: 00006
 Prediction frame files: ../TokenHMR/demo_out/my_image/00006_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00006
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00006
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -758,12 +758,12 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[229.805   272.53406 375.8885  186.45633]
- [317.0183  413.49197 139.25343 382.9294 ]
- [231.96178 150.1109  434.30997 277.5502 ]
- [193.0973  219.47844 394.32944 232.53433]]
+[[165.85191  213.23592  306.69962  100.60863 ]
+ [262.3881   349.84302   69.386505 315.52182 ]
+ [169.02066   84.57198  370.40747  212.57301 ]
+ [119.939735 145.84706  326.68896  158.19885 ]]
 
-Best total matching score: 668.92 mm
+Best total matching score: 374.51 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria04
@@ -777,17 +777,17 @@ Frame: 00006
 TokenHMR detection id: 0
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00006_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00006_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1785.89 mm
-Root-aligned MPJPE:     186.46 mm
-PA-MPJPE:               75.95 mm
-Global root drift:      1.8812 m
+Raw MPJPE:              193.10 mm
+Root-aligned MPJPE:     100.61 mm
+PA-MPJPE:               60.44 mm
+Global root drift:      0.1515 m
 ==============================================================
 
 ############################################################
@@ -795,17 +795,17 @@ Frame: 00006
 TokenHMR detection id: 1
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00006_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00006_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              884.48 mm
-Root-aligned MPJPE:     139.25 mm
-PA-MPJPE:               64.30 mm
-Global root drift:      0.8598 m
+Raw MPJPE:              212.16 mm
+Root-aligned MPJPE:     69.39 mm
+PA-MPJPE:               51.17 mm
+Global root drift:      0.2122 m
 ==============================================================
 
 ############################################################
@@ -813,17 +813,17 @@ Frame: 00006
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00006_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00006_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1706.20 mm
-Root-aligned MPJPE:     150.11 mm
-PA-MPJPE:               47.52 mm
-Global root drift:      1.6771 m
+Raw MPJPE:              102.63 mm
+Root-aligned MPJPE:     84.57 mm
+PA-MPJPE:               37.82 mm
+Global root drift:      0.0615 m
 ==============================================================
 
 ############################################################
@@ -831,17 +831,17 @@ Frame: 00006
 TokenHMR detection id: 3
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00006_3.obj
-Ground truth: data/mesh_cam/cam01/rgb/00006/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00006_3.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00006/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00006/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              1878.34 mm
-Root-aligned MPJPE:     193.10 mm
-PA-MPJPE:               134.04 mm
-Global root drift:      1.8837 m
+Raw MPJPE:              311.47 mm
+Root-aligned MPJPE:     119.94 mm
+PA-MPJPE:               106.68 mm
+Global root drift:      0.2789 m
 ==============================================================
 
 Important:
@@ -855,7 +855,7 @@ Important:
 Model: TokenHMR
 Frame: 00007
 Prediction frame files: ../TokenHMR/demo_out/my_image/00007_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00007
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00007
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -897,11 +897,11 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[232.1406  252.84729 378.44443 191.69003]
- [317.56522 393.15656 137.5386  384.30038]
- [217.5438  144.09357 409.4528  273.65817]]
+[[177.7315  196.95468 315.07578 110.03381]
+ [265.81763 330.21317  74.63328 313.0989 ]
+ [155.05626  68.43128 346.58035 204.04053]]
 
-Best total matching score: 473.32 mm
+Best total matching score: 253.10 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria04
@@ -914,17 +914,17 @@ Frame: 00007
 TokenHMR detection id: 0
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00007_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00007_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1760.93 mm
-Root-aligned MPJPE:     191.69 mm
-PA-MPJPE:               82.88 mm
-Global root drift:      1.8610 m
+Raw MPJPE:              216.90 mm
+Root-aligned MPJPE:     110.03 mm
+PA-MPJPE:               65.96 mm
+Global root drift:      0.1679 m
 ==============================================================
 
 ############################################################
@@ -932,17 +932,17 @@ Frame: 00007
 TokenHMR detection id: 1
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00007_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00007_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              919.90 mm
-Root-aligned MPJPE:     137.54 mm
-PA-MPJPE:               62.79 mm
-Global root drift:      0.8910 m
+Raw MPJPE:              188.46 mm
+Root-aligned MPJPE:     74.63 mm
+PA-MPJPE:               49.97 mm
+Global root drift:      0.1915 m
 ==============================================================
 
 ############################################################
@@ -950,17 +950,17 @@ Frame: 00007
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00007_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00007/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00007_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00007/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00007/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1629.75 mm
-Root-aligned MPJPE:     144.09 mm
-PA-MPJPE:               31.46 mm
-Global root drift:      1.6198 m
+Raw MPJPE:              111.53 mm
+Root-aligned MPJPE:     68.43 mm
+PA-MPJPE:               25.04 mm
+Global root drift:      0.0989 m
 ==============================================================
 
 Important:
@@ -974,7 +974,7 @@ Important:
 Model: TokenHMR
 Frame: 00008
 Prediction frame files: ../TokenHMR/demo_out/my_image/00008_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00008
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00008
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -1016,11 +1016,11 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[327.98682 382.83563 156.37535 379.06332]
- [238.7207  242.28955 382.7282  186.15764]
- [206.89851 150.31068 393.18546 276.59723]]
+[[271.87088 319.81018  96.04651 306.47253]
+ [188.06367 190.71992 318.70547 105.77345]
+ [140.61438  77.38828 324.7157  204.29921]]
 
-Best total matching score: 492.84 mm
+Best total matching score: 279.21 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -1033,17 +1033,17 @@ Frame: 00008
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00008_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00008_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              982.51 mm
-Root-aligned MPJPE:     156.38 mm
-PA-MPJPE:               63.48 mm
-Global root drift:      0.9545 m
+Raw MPJPE:              150.85 mm
+Root-aligned MPJPE:     96.05 mm
+PA-MPJPE:               50.52 mm
+Global root drift:      0.1487 m
 ==============================================================
 
 ############################################################
@@ -1051,17 +1051,17 @@ Frame: 00008
 TokenHMR detection id: 1
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00008_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00008_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1740.72 mm
-Root-aligned MPJPE:     186.16 mm
-PA-MPJPE:               84.80 mm
-Global root drift:      1.8077 m
+Raw MPJPE:              231.55 mm
+Root-aligned MPJPE:     105.77 mm
+PA-MPJPE:               67.49 mm
+Global root drift:      0.2021 m
 ==============================================================
 
 ############################################################
@@ -1069,17 +1069,17 @@ Frame: 00008
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00008_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00008/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00008_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00008/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00008/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1586.51 mm
-Root-aligned MPJPE:     150.31 mm
-PA-MPJPE:               42.47 mm
-Global root drift:      1.5885 m
+Raw MPJPE:              151.97 mm
+Root-aligned MPJPE:     77.39 mm
+PA-MPJPE:               33.80 mm
+Global root drift:      0.1443 m
 ==============================================================
 
 Important:
@@ -1093,7 +1093,7 @@ Important:
 Model: TokenHMR
 Frame: 00009
 Prediction frame files: ../TokenHMR/demo_out/my_image/00009_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00009
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00009
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -1135,11 +1135,11 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[340.4913  395.14594 156.6558  388.18558]
- [231.59349 254.2169  383.57816 181.79428]
- [194.23308 156.688   406.56146 282.15314]]
+[[281.63974  329.94244   88.080605 311.22598 ]
+ [185.43367  202.49458  318.56094  101.94123 ]
+ [127.19561   84.368286 336.5686   209.21648 ]]
 
-Best total matching score: 495.14 mm
+Best total matching score: 274.39 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -1152,17 +1152,17 @@ Frame: 00009
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00009_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00009_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              982.49 mm
-Root-aligned MPJPE:     156.66 mm
-PA-MPJPE:               58.95 mm
-Global root drift:      0.9494 m
+Raw MPJPE:              161.04 mm
+Root-aligned MPJPE:     88.08 mm
+PA-MPJPE:               46.92 mm
+Global root drift:      0.1637 m
 ==============================================================
 
 ############################################################
@@ -1170,17 +1170,17 @@ Frame: 00009
 TokenHMR detection id: 1
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00009_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00009_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1794.51 mm
-Root-aligned MPJPE:     181.79 mm
-PA-MPJPE:               83.66 mm
-Global root drift:      1.8319 m
+Raw MPJPE:              177.83 mm
+Root-aligned MPJPE:     101.94 mm
+PA-MPJPE:               66.58 mm
+Global root drift:      0.1732 m
 ==============================================================
 
 ############################################################
@@ -1188,17 +1188,17 @@ Frame: 00009
 TokenHMR detection id: 2
 Auto-matched GT person: aria02
 Prediction: ../TokenHMR/demo_out/my_image/00009_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00009/mesh_aria02.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria02.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00009_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00009/mesh_aria02.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00009/mesh_aria02.obj
 --------------------------------------------------------------
-Raw MPJPE:              1504.75 mm
-Root-aligned MPJPE:     156.69 mm
-PA-MPJPE:               54.75 mm
-Global root drift:      1.4982 m
+Raw MPJPE:              226.10 mm
+Root-aligned MPJPE:     84.37 mm
+PA-MPJPE:               43.57 mm
+Global root drift:      0.2318 m
 ==============================================================
 
 Important:
@@ -1212,7 +1212,7 @@ Important:
 Model: TokenHMR
 Frame: 00010
 Prediction frame files: ../TokenHMR/demo_out/my_image/00010_*.obj
-GT frame dir: ./data/mesh_cam/cam01/rgb/00010
+GT frame dir: ./data/mesh_cam_unscaled/cam01/rgb/00010
 ################################################################
 /home/musicangel/DigitalHumans/Project/./src/baseline_mpjpe_same_regressor.py:94: DeprecationWarning: `np.bool` is a deprecated alias for the builtin `bool`. To silence this warning, use `bool` by itself. Doing this will not modify any behavior and is safe. If you specifically wanted the numpy scalar type, use `np.bool_` here.
 Deprecated in NumPy 1.20; for more details and guidance: https://numpy.org/devdocs/release/1.20.0-notes.html#deprecations
@@ -1254,11 +1254,11 @@ GT person ids: ['aria01', 'aria02', 'aria03', 'aria04']
 
 Pairwise root-aligned MPJPE matrix, mm
 Rows = prediction det_id, columns = GT person
-[[366.00534 427.5519  158.15602 408.99847]
- [227.53644 272.2233  406.9989  173.93268]
- [161.83736 202.45651 391.6631  270.94064]]
+[[311.52554  362.14957   82.88767  338.2089  ]
+ [185.90999  217.24255  338.5433    97.41447 ]
+ [103.639656 133.58472  320.8024   199.03017 ]]
 
-Best total matching score: 493.93 mm
+Best total matching score: 283.94 mm
 
 Auto detection-to-GT identity mapping:
   det 0 -> aria03
@@ -1271,17 +1271,17 @@ Frame: 00010
 TokenHMR detection id: 0
 Auto-matched GT person: aria03
 Prediction: ../TokenHMR/demo_out/my_image/00010_0.obj
-Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria03.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria03.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00010_0.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria03.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria03.obj
 --------------------------------------------------------------
-Raw MPJPE:              1115.76 mm
-Root-aligned MPJPE:     158.16 mm
-PA-MPJPE:               66.04 mm
-Global root drift:      1.0898 m
+Raw MPJPE:              92.77 mm
+Root-aligned MPJPE:     82.89 mm
+PA-MPJPE:               52.56 mm
+Global root drift:      0.0498 m
 ==============================================================
 
 ############################################################
@@ -1289,17 +1289,17 @@ Frame: 00010
 TokenHMR detection id: 1
 Auto-matched GT person: aria04
 Prediction: ../TokenHMR/demo_out/my_image/00010_1.obj
-Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria04.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria04.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00010_1.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria04.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria04.obj
 --------------------------------------------------------------
-Raw MPJPE:              1638.09 mm
-Root-aligned MPJPE:     173.93 mm
-PA-MPJPE:               76.62 mm
-Global root drift:      1.6479 m
+Raw MPJPE:              321.43 mm
+Root-aligned MPJPE:     97.41 mm
+PA-MPJPE:               60.98 mm
+Global root drift:      0.3334 m
 ==============================================================
 
 ############################################################
@@ -1307,17 +1307,17 @@ Frame: 00010
 TokenHMR detection id: 2
 Auto-matched GT person: aria01
 Prediction: ../TokenHMR/demo_out/my_image/00010_2.obj
-Ground truth: data/mesh_cam/cam01/rgb/00010/mesh_aria01.obj
+Ground truth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria01.obj
 ############################################################
 
 ================ SMPL-Regressed Joint Metrics ================
 Prediction: ../TokenHMR/demo_out/my_image/00010_2.obj
-Groundtruth: data/mesh_cam/cam01/rgb/00010/mesh_aria01.obj
+Groundtruth: data/mesh_cam_unscaled/cam01/rgb/00010/mesh_aria01.obj
 --------------------------------------------------------------
-Raw MPJPE:              3775.71 mm
-Root-aligned MPJPE:     161.84 mm
-PA-MPJPE:               119.15 mm
-Global root drift:      3.8432 m
+Raw MPJPE:              1637.42 mm
+Root-aligned MPJPE:     103.64 mm
+PA-MPJPE:               94.83 mm
+Global root drift:      1.6835 m
 ==============================================================
 
 Important:

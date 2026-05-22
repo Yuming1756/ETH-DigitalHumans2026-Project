@@ -31,7 +31,7 @@ case "$MODEL" in
     ;;
 esac
 
-GT_ROOT=./data/mesh_cam/cam01/rgb
+GT_ROOT=./data/mesh_cam_unscaled/cam01/rgb
 
 if [ ! -d "$PRED_DIR" ]; then
   echo "[ERROR] Prediction directory not found:"

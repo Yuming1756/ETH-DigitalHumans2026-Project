@@ -246,7 +246,14 @@ def make_translation(opt_param, init_T, opt_mode):
     raise ValueError(f"Unknown opt_mode: {opt_mode}")
 
 
-def compute_metrics(pred_joints_camera, T, head_index, head_target_camera=None):
+def compute_metrics(
+    pred_joints_camera,
+    T,
+    head_index,
+    head_target_camera=None,
+    pred_vertices_local_t=None,
+    target_vertex_ids_t=None,
+):
     out = {}
 
     pred_joints_full = pred_joints_camera + T[None, :]
@@ -258,7 +265,41 @@ def compute_metrics(pred_joints_camera, T, head_index, head_target_camera=None):
         head_err = torch.linalg.norm(pred_head - head_target_camera)
         out["head_error_m"] = float(head_err.detach().cpu().item())
 
+    if (
+        head_target_camera is not None
+        and pred_vertices_local_t is not None
+        and target_vertex_ids_t is not None
+    ):
+        vertex_proxy = pred_vertices_local_t[target_vertex_ids_t].mean(dim=0) + T
+        vertex_err = torch.linalg.norm(vertex_proxy - head_target_camera)
+
+        out["vertex_proxy_camera"] = vertex_proxy.detach().cpu().numpy()
+        out["vertex_proxy_error_m"] = float(vertex_err.detach().cpu().item())
+
     return out
+
+def compute_reprojection_error_px(
+    pred_joints_local_t,
+    T,
+    kpt_joint_ids_t,
+    keypoints_2d_t,
+    fx,
+    fy,
+    cx,
+    cy,
+    project_points_camera,
+):
+    joints_sel = pred_joints_local_t[kpt_joint_ids_t] + T[None, :]
+    proj = project_points_camera(joints_sel, fx, fy, cx, cy)
+
+    diff_px = proj - keypoints_2d_t[:, :2]
+    conf = keypoints_2d_t[:, 2].clamp(min=0.0)
+
+    px_err = torch.sum(
+        conf * torch.linalg.norm(diff_px, dim=1)
+    ) / torch.clamp(conf.sum(), min=1.0)
+
+    return px_err
 
 
 
@@ -291,6 +332,17 @@ def main():
     )
 
     parser.add_argument("--head_index", type=int, default=15, help="SMPL head joint index. Usually 15.")
+    parser.add_argument(
+        "--target_vertex_ids",
+        type=int,
+        nargs="+",
+        default=None,
+        help=(
+            "Optional SMPL vertex IDs used as a glasses/forehead proxy. "
+            "If provided, the mean of these vertices is matched to the Aria target "
+            "instead of the SMPL head joint."
+        ),
+    )
     parser.add_argument("--root_index", type=int, default=0, help="SMPL root/pelvis joint index. Usually 0.")
 
     # Optional offset if your target is Aria camera center rather than SMPL head joint.
@@ -337,6 +389,56 @@ def main():
     parser.add_argument("--w_trans_prior", type=float, default=0.05)
     parser.add_argument("--w_z_positive", type=float, default=10.0)
 
+    parser.add_argument(
+        "--proxy_radius",
+        type=float,
+        default=0.18,
+        help=(
+            "Dead-zone radius in meters for the Aria/head proxy. "
+            "The Aria glasses location is allowed to differ from the SMPL head joint by this amount."
+        ),
+    )
+
+    parser.add_argument(
+        "--max_shift",
+        type=float,
+        default=0.35,
+        help="Translation changes larger than this distance from init_T are penalized.",
+    )
+
+    parser.add_argument(
+        "--w_trust",
+        type=float,
+        default=10.0,
+        help="Trust-region penalty weight for translations moving farther than max_shift.",
+    )
+
+    parser.add_argument(
+        "--w_z_prior",
+        type=float,
+        default=0.5,
+        help="Extra penalty on changing depth Tz from init_Tz.",
+    )
+
+    parser.add_argument(
+        "--reproj_clip_px",
+        type=float,
+        default=150.0,
+        help=(
+            "Clip each 2D reprojection residual to this pixel magnitude. "
+            "Set <=0 to disable clipping."
+        ),
+    )
+    parser.add_argument(
+        "--huber_delta_2d",
+        type=float,
+        default=0.05,
+        help=(
+            "Huber delta for normalized 2D reprojection residual. "
+            "0.05 roughly corresponds to 0.05 * focal_length ≈ 95 px."
+        ),
+    )
+
     args = parser.parse_args()
 
     pred_npz = Path(args.pred_npz).expanduser()
@@ -356,12 +458,16 @@ def main():
     if pred_vertices_local.shape != (6890, 3):
         raise ValueError(f"Expected pred_vertices_local shape (6890,3), got {pred_vertices_local.shape}")
 
-    if "pred_cam_t_full" in data.files:
+    if "T_opt" in data.files:
+        init_T = data["T_opt"].astype(np.float32)
+        print("[Init] Using T_opt from previous optimization stage.")
+    elif "pred_cam_t_full" in data.files:
         init_T = data["pred_cam_t_full"].astype(np.float32)
+        print("[Init] Using original pred_cam_t_full.")
     else:
         raise KeyError(
-            f"{pred_npz} does not contain pred_cam_t_full. "
-            "Add the NPZ-saving block to demo.py and rerun TokenHMR."
+            f"{pred_npz} does not contain T_opt or pred_cam_t_full. "
+            "Need either original TokenHMR/4DHumans NPZ or stage-1 optimized NPZ."
         )
 
     if init_T.shape != (3,):
@@ -441,6 +547,16 @@ def main():
         kpt_joint_ids_t = None
         keypoints_2d_t = None
 
+    if args.target_vertex_ids is not None:
+        target_vertex_ids_t = torch.tensor(
+            args.target_vertex_ids,
+            dtype=torch.long,
+            device=device,
+        )
+        print("[Target vertices] using vertex IDs:", args.target_vertex_ids)
+    else:
+        target_vertex_ids_t = None
+
     fx = torch.tensor(float(args.fx), dtype=torch.float32, device=device)
     fy = torch.tensor(float(args.fy), dtype=torch.float32, device=device)
     cx = torch.tensor(float(args.cx), dtype=torch.float32, device=device)
@@ -488,6 +604,8 @@ def main():
             T0,
             args.head_index,
             head_target_camera_t,
+            pred_vertices_local_t=pred_vertices_local_t,
+            target_vertex_ids_t=target_vertex_ids_t,
         )
         print("initial predicted head camera:", m0["pred_head_camera"])
         if "head_error_m" in m0:
@@ -511,6 +629,7 @@ def main():
                 pred_vertices_local_t=pred_vertices_local_t,
                 init_T_t=init_T_t,
                 head_target_camera_t=head_target_camera_t,
+                target_vertex_ids_t=target_vertex_ids_t,
                 keypoints_2d_t=keypoints_2d_t,
                 kpt_joint_ids_t=kpt_joint_ids_t,
                 fx=fx,
@@ -531,6 +650,8 @@ def main():
                         T_now,
                         args.head_index,
                         head_target_camera_t,
+                        pred_vertices_local_t=pred_vertices_local_t,
+                        target_vertex_ids_t=target_vertex_ids_t,
                     )
 
                     msg = (
@@ -538,16 +659,30 @@ def main():
                         f"loss={loss.item():.6f} | "
                         f"T={T_now.detach().cpu().numpy()}"
                     )
+                    if "shift" in loss_terms:
+                        msg += f" | shift={loss_terms['shift'].item():.3f}m"
+
+                    if "head_dist" in loss_terms:
+                        msg += f" | head_dist={loss_terms['head_dist'].item() * 1000.0:.1f}mm"
+
+                    if "2d" in loss_terms:
+                        msg += f" | loss2d={loss_terms['2d'].item():.6f}"
 
                     if "head_error_m" in metrics_now:
                         msg += f" | head_err={metrics_now['head_error_m'] * 1000.0:.2f}mm"
 
+                    if "vertex_proxy_error_m" in metrics_now:
+                        msg += f" | vertex_err={metrics_now['vertex_proxy_error_m'] * 1000.0:.2f}mm"
+
                     if keypoints_2d_t is not None:
                         joints_sel = pred_joints_local_t[kpt_joint_ids_t] + T_now[None, :]
                         proj = project_points_camera(joints_sel, fx, fy, cx, cy)
+
                         diff_px = proj - keypoints_2d_t[:, :2]
                         conf = keypoints_2d_t[:, 2].clamp(min=0.0)
+
                         px_err = torch.sum(conf * torch.linalg.norm(diff_px, dim=1)) / torch.clamp(conf.sum(), min=1.0)
+
                         msg += f" | reproj={px_err.item():.2f}px"
 
                     print(msg)
@@ -567,6 +702,7 @@ def main():
                 pred_vertices_local_t=pred_vertices_local_t,
                 init_T_t=init_T_t,
                 head_target_camera_t=head_target_camera_t,
+                target_vertex_ids_t=target_vertex_ids_t,
                 keypoints_2d_t=keypoints_2d_t,
                 kpt_joint_ids_t=kpt_joint_ids_t,
                 fx=fx,
@@ -588,6 +724,8 @@ def main():
                         T_now,
                         args.head_index,
                         head_target_camera_t,
+                        pred_vertices_local_t=pred_vertices_local_t,
+                        target_vertex_ids_t=target_vertex_ids_t,
                     )
 
                     msg = (
@@ -598,6 +736,32 @@ def main():
 
                     if "head_error_m" in metrics_now:
                         msg += f" | head_err={metrics_now['head_error_m'] * 1000.0:.2f}mm"
+                    
+                    if "vertex_proxy_error_m" in metrics_now:
+                        msg += f" | vertex_err={metrics_now['vertex_proxy_error_m'] * 1000.0:.2f}mm"
+
+                    if keypoints_2d_t is not None:
+                        px_err = compute_reprojection_error_px(
+                            pred_joints_local_t,
+                            T_now,
+                            kpt_joint_ids_t,
+                            keypoints_2d_t,
+                            fx,
+                            fy,
+                            cx,
+                            cy,
+                            project_points_camera,
+                        )
+                        msg += f" | reproj={px_err.item():.2f}px"
+
+                    if "shift" in loss_terms:
+                        msg += f" | shift={loss_terms['shift'].item():.3f}m"
+
+                    if "head_dist" in loss_terms:
+                        msg += f" | head_dist={loss_terms['head_dist'].item() * 1000.0:.1f}mm"
+
+                    if "2d" in loss_terms:
+                        msg += f" | loss2d={loss_terms['2d'].item():.6f}"
 
                     print(msg)
 
@@ -615,6 +779,7 @@ def main():
                 pred_vertices_local_t=pred_vertices_local_t,
                 init_T_t=init_T_t,
                 head_target_camera_t=head_target_camera_t,
+                target_vertex_ids_t=target_vertex_ids_t,
                 keypoints_2d_t=keypoints_2d_t,
                 kpt_joint_ids_t=kpt_joint_ids_t,
                 fx=fx,
@@ -633,11 +798,28 @@ def main():
                 T_now,
                 args.head_index,
                 head_target_camera_t,
+                pred_vertices_local_t=pred_vertices_local_t,
+                target_vertex_ids_t=target_vertex_ids_t,
             )
 
             if "head_error_m" in metrics_now:
                 msg += f" | head_err={metrics_now['head_error_m'] * 1000.0:.2f}mm"
+            if "vertex_proxy_error_m" in metrics_now:
+                msg += f" | vertex_err={metrics_now['vertex_proxy_error_m'] * 1000.0:.2f}mm"
 
+            if keypoints_2d_t is not None:
+                px_err = compute_reprojection_error_px(
+                    pred_joints_local_t,
+                    T_now,
+                    kpt_joint_ids_t,
+                    keypoints_2d_t,
+                    fx,
+                    fy,
+                    cx,
+                    cy,
+                    project_points_camera,
+                )
+                msg += f" | reproj={px_err.item():.2f}px"
             print(msg)
 
     else:
@@ -660,16 +842,67 @@ def main():
     )
 
     out_npz = out_obj.with_suffix(".npz")
-    np.savez(
-        out_npz,
-        pred_vertices_local=pred_vertices_local.astype(np.float32),
-        pred_vertices_full_camera=pred_vertices_full_camera_np.astype(np.float32),
-        pred_vertices_export=pred_vertices_export_np.astype(np.float32),
-        init_T=init_T.astype(np.float32),
-        T_opt=T_final.detach().cpu().numpy().astype(np.float32),
-        head_target_camera=None if head_target_camera_np is None else head_target_camera_np.astype(np.float32),
-        head_target_export=None if head_target_camera_np is None else camera_to_mesh_cam(head_target_camera_np).astype(np.float32),
+
+    # ------------------------------------------------------------
+    # Save optimized NPZ.
+    #
+    # Important:
+    # - Preserve all original HMR/SMPL parameters from input NPZ.
+    # - Add/update T_opt so Stage-2 optimization can initialize from it.
+    # - Update full-camera/export vertices according to T_opt.
+    # ------------------------------------------------------------
+
+    save_dict = {}
+
+    # Copy all original keys from the input NPZ.
+    # This preserves:
+    #   global_orient
+    #   body_pose
+    #   betas
+    #   pred_cam_t_full
+    #   pred_cam
+    #   box_center
+    #   box_size
+    #   img_size
+    #   focal_length
+    #   person_id
+    #   and any 4D-Humans aliases such as pred_smpl_body_pose.
+    for key in data.files:
+        save_dict[key] = data[key]
+
+    T_final_np = T_final.detach().cpu().numpy().astype(np.float32)
+
+    # Overwrite / add optimized translation-related fields.
+    save_dict.update(
+        {
+            # Local mesh is unchanged in translation-only optimization.
+            "pred_vertices_local": pred_vertices_local.astype(np.float32),
+
+            # Optimized full-camera vertices.
+            "pred_vertices_full_camera": pred_vertices_full_camera_np.astype(np.float32),
+
+            # Optimized exported OBJ / mesh_cam-like vertices.
+            "pred_vertices_export": pred_vertices_export_np.astype(np.float32),
+
+            # Translation used to initialize this optimization run.
+            # If this is Stage 1, init_T is original pred_cam_t_full.
+            # If this is Stage 2, init_T may be previous T_opt.
+            "init_T": init_T.astype(np.float32),
+
+            # Final optimized translation.
+            # Stage 2 will load this key first.
+            "T_opt": T_final_np,
+
+            # Useful for debugging.
+            "T_delta_from_init": (T_final_np - init_T.astype(np.float32)).astype(np.float32),
+        }
     )
+
+    if head_target_camera_np is not None:
+        save_dict["head_target_camera"] = head_target_camera_np.astype(np.float32)
+        save_dict["head_target_export"] = camera_to_mesh_cam(head_target_camera_np).astype(np.float32)
+
+    np.savez(out_npz, **save_dict)
 
     print(f"[Saved] optimized NPZ: {out_npz}")
 
@@ -684,8 +917,12 @@ def main():
             T_final,
             args.head_index,
             head_target_camera_t,
+            pred_vertices_local_t=pred_vertices_local_t,
+            target_vertex_ids_t=target_vertex_ids_t,
         )
         print(f"Final head error: {final_metrics['head_error_m'] * 1000.0:.2f} mm")
+        if "vertex_proxy_error_m" in final_metrics:
+            print(f"Final vertex-proxy error: {final_metrics['vertex_proxy_error_m'] * 1000.0:.2f} mm")
 
     print("===================================")
 

@@ -41,3 +41,10 @@ head_targets/*
 # Metrics outputs
 metrics_*.csv
 *_summary.csv
+
+#visualization
+*.html
+*.jpg
+
+#text file
+*.txt

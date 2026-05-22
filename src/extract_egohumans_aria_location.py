@@ -189,6 +189,81 @@ def transform_point(T, p):
     out = T @ p_h
     return out[:3] / out[3]
 
+def scale_from_similarity_transform(T):
+    """
+    If the 3x3 block is A = sR, recover s from det(A).
+    """
+    A = np.asarray(T, dtype=np.float64)[:3, :3]
+    return float(np.cbrt(abs(np.linalg.det(A))))
+
+def normalize_vector(v, eps=1e-8):
+    v = np.asarray(v, dtype=np.float64)
+    n = np.linalg.norm(v)
+    if n < eps:
+        raise ValueError(f"Cannot normalize near-zero vector: {v}")
+    return v / n
+
+
+def rotation_from_similarity_transform(T):
+    """
+    Extract a proper rotation matrix from the 3x3 block of a transform.
+
+    Some EgoHumans transforms contain similarity scale, so the 3x3 block
+    can be A = sR instead of pure R. We remove scale/shear by SVD.
+    """
+    A = np.asarray(T, dtype=np.float64)[:3, :3]
+
+    U, _, Vt = np.linalg.svd(A)
+    R = U @ Vt
+
+    # Fix possible reflection.
+    if np.linalg.det(R) < 0:
+        U[:, -1] *= -1.0
+        R = U @ Vt
+
+    return R
+
+
+def direction_from_aria_to_exo(
+    T_aria_from_anchor_world,
+    T_exo_from_anchor_world,
+    aria_axis=np.array([0.0, 0.0, 1.0]),
+):
+    """
+    Convert an Aria camera-local direction into exo/cam01 positive-Z coordinates.
+
+    T_aria_from_anchor_world:
+        x_aria = R_aria_world x_world + t
+
+    T_exo_from_anchor_world:
+        x_exo = R_exo_world x_world + t
+
+    For a direction:
+        d_world = R_aria_world.T @ d_aria
+        d_exo   = R_exo_world @ d_world
+    """
+    R_aria_from_world = rotation_from_similarity_transform(T_aria_from_anchor_world)
+    R_exo_from_world = rotation_from_similarity_transform(T_exo_from_anchor_world)
+
+    aria_axis = normalize_vector(aria_axis)
+
+    d_world = R_aria_from_world.T @ aria_axis
+    d_exo = R_exo_from_world @ d_world
+
+    return normalize_vector(d_exo)
+
+
+def posz_vector_to_mesh_cam(v):
+    """
+    Direction vector conversion:
+      positive-Z camera vector: [x, y, z]
+      mesh_cam/export vector:   [x, -y, -z]
+    """
+    v = np.asarray(v, dtype=np.float64).copy()
+    v[1] *= -1
+    v[2] *= -1
+    return normalize_vector(v)
+
 
 def camera_center_from_world_to_cam(T_cam_from_world):
     """
@@ -266,10 +341,75 @@ def main():
     parser.add_argument("--anchor_aria", default="aria01")
     parser.add_argument("--smpl_model_dir", default="~/DigitalHumans/4D-Humans/data")
     parser.add_argument("--save_target", default=None)
+    parser.add_argument(
+        "--save_orientation_target",
+        default=None,
+        help="Save Aria forward direction in cam01 positive-Z coordinates.",
+    )
+    parser.add_argument(
+        "--save_forward_target",
+        default=None,
+        help="Save Aria forward direction in cam01 positive-Z coordinates. Same purpose as --save_orientation_target.",
+    )
+
+    parser.add_argument(
+        "--save_up_target",
+        default=None,
+        help="Save Aria up direction in cam01 positive-Z coordinates.",
+    )
+
+    parser.add_argument(
+        "--up_axis",
+        choices=["+z", "-z", "+x", "-x", "+y", "-y"],
+        default="-y",
+        help=(
+            "Camera-local up axis. If Aria follows normal camera convention "
+            "(+X right, +Y down, +Z forward), then up is -Y."
+        ),
+    )
+
+    parser.add_argument(
+        "--orientation_camera",
+        choices=["rgb", "left", "right", "avg_left_right"],
+        default="rgb",
+        help=(
+            "Which Aria camera orientation to use. "
+            "For head orientation, rgb or avg_left_right are usually reasonable."
+        ),
+    )
+
+    parser.add_argument(
+        "--forward_axis",
+        choices=["+z", "-z", "+x", "-x", "+y", "-y"],
+        default="+z",
+        help=(
+            "Camera-local forward axis. Try +z first. "
+            "If visualization shows the direction is backward, try -z."
+        ),
+    )
     parser.add_argument("--gt_obj", default=None)
     parser.add_argument("--head_index", type=int, default=15)
     parser.add_argument("--root_index", type=int, default=0)
+    parser.add_argument(
+        "--remove_colmap_scale",
+        action="store_true",
+        help=(
+            "Remove the Aria-to-COLMAP similarity scale from the exo-camera "
+            "transform. Use this when targets should match mesh_cam_unscaled."
+        ),
+    )
     args = parser.parse_args()
+    axis_map = {
+        "+z": np.array([0.0, 0.0, 1.0]),
+        "-z": np.array([0.0, 0.0, -1.0]),
+        "+x": np.array([1.0, 0.0, 0.0]),
+        "-x": np.array([-1.0, 0.0, 0.0]),
+        "+y": np.array([0.0, 1.0, 0.0]),
+        "-y": np.array([0.0, -1.0, 0.0]),
+    }
+
+    aria_forward_axis = axis_map[args.forward_axis]
+    aria_up_axis = axis_map[args.up_axis]
 
     data_root = Path(args.data_root).expanduser()
 
@@ -317,7 +457,103 @@ def main():
 
     print(f"Requested COLMAP image: {image_name}")
     print(f"Used COLMAP image:      {used_colmap_image}")
+
+    # EgoHumans original exo transform:
+    #   cam_from_anchor_world_scaled = cam_from_colmap @ colmap_from_anchor_aria
+    #
+    # primary_transform contains a similarity scale s ~= 1.25.
+    # If we want targets compatible with mesh_cam_unscaled, remove this scale.
     T_exo_from_anchor_world = T_exo_from_colmap @ primary_transform
+
+    colmap_scale = scale_from_similarity_transform(primary_transform)
+
+    print("\n========== Scale debug ==========")
+    print("primary_transform scale:", colmap_scale)
+    print("scaled exo 3x3 column norms:",
+          np.linalg.norm(T_exo_from_anchor_world[:3, :3], axis=0))
+
+    if args.remove_colmap_scale:
+        T_exo_from_anchor_world_unscaled = T_exo_from_anchor_world.copy()
+        T_exo_from_anchor_world_unscaled[:3, :] /= colmap_scale
+        T_exo_from_anchor_world = T_exo_from_anchor_world_unscaled
+
+        print("[remove_colmap_scale] Enabled.")
+        print("unscaled exo 3x3 column norms:",
+              np.linalg.norm(T_exo_from_anchor_world[:3, :3], axis=0))
+    else:
+        print("[remove_colmap_scale] Disabled. Using original EgoHumans scaled target.")
+    
+    # ------------------------------------------------------------
+    # Aria orientation in cam01 positive-Z coordinate
+    # ------------------------------------------------------------
+    rgb_forward_cam01 = direction_from_aria_to_exo(
+        T_rgb_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_forward_axis,
+    )
+
+    left_forward_cam01 = direction_from_aria_to_exo(
+        T_left_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_forward_axis,
+    )
+
+    right_forward_cam01 = direction_from_aria_to_exo(
+        T_right_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_forward_axis,
+    )
+
+    avg_left_right_forward_cam01 = normalize_vector(
+        left_forward_cam01 + right_forward_cam01
+    )
+
+    # ------------------------------------------------------------
+    # Aria UP direction in cam01 positive-Z coordinate
+    # ------------------------------------------------------------
+    rgb_up_cam01 = direction_from_aria_to_exo(
+        T_rgb_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_up_axis,
+    )
+
+    left_up_cam01 = direction_from_aria_to_exo(
+        T_left_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_up_axis,
+    )
+
+    right_up_cam01 = direction_from_aria_to_exo(
+        T_right_from_anchor_world,
+        T_exo_from_anchor_world,
+        aria_axis=aria_up_axis,
+    )
+
+    avg_left_right_up_cam01 = normalize_vector(
+        left_up_cam01 + right_up_cam01
+    )
+
+    if args.orientation_camera == "rgb":
+        aria_up_cam01 = rgb_up_cam01
+    elif args.orientation_camera == "left":
+        aria_up_cam01 = left_up_cam01
+    elif args.orientation_camera == "right":
+        aria_up_cam01 = right_up_cam01
+    elif args.orientation_camera == "avg_left_right":
+        aria_up_cam01 = avg_left_right_up_cam01
+    else:
+        raise ValueError(args.orientation_camera)
+
+    if args.orientation_camera == "rgb":
+        aria_forward_cam01 = rgb_forward_cam01
+    elif args.orientation_camera == "left":
+        aria_forward_cam01 = left_forward_cam01
+    elif args.orientation_camera == "right":
+        aria_forward_cam01 = right_forward_cam01
+    elif args.orientation_camera == "avg_left_right":
+        aria_forward_cam01 = avg_left_right_forward_cam01
+    else:
+        raise ValueError(args.orientation_camera)
 
     # Express Aria points in cam01 positive-Z camera coordinate.
     rgb_center_cam01 = transform_point(T_exo_from_anchor_world, rgb_center_world)
@@ -355,6 +591,36 @@ def main():
     print("right_center_mesh_cam:  ", posz_to_mesh_cam(right_center_cam01))
     print("glasses_center_mesh_cam:", posz_to_mesh_cam(glasses_center_cam01))
 
+    print("\n--- Aria forward directions in cam01 positive-Z coordinate ---")
+    print("forward_axis in Aria camera:", args.forward_axis)
+    print("rgb_forward_cam01:           ", rgb_forward_cam01)
+    print("left_forward_cam01:          ", left_forward_cam01)
+    print("right_forward_cam01:         ", right_forward_cam01)
+    print("avg_left_right_forward_cam01:", avg_left_right_forward_cam01)
+    print("SELECTED aria_forward_cam01: ", aria_forward_cam01)
+
+    print("\n--- Aria UP directions in cam01 positive-Z coordinate ---")
+    print("up_axis in Aria camera:", args.up_axis)
+    print("rgb_up_cam01:           ", rgb_up_cam01)
+    print("left_up_cam01:          ", left_up_cam01)
+    print("right_up_cam01:         ", right_up_cam01)
+    print("avg_left_right_up_cam01:", avg_left_right_up_cam01)
+    print("SELECTED aria_up_cam01: ", aria_up_cam01)
+
+    print("\n--- Aria forward directions in mesh_cam/export vector convention ---")
+    print("rgb_forward_mesh_cam:           ", posz_vector_to_mesh_cam(rgb_forward_cam01))
+    print("left_forward_mesh_cam:          ", posz_vector_to_mesh_cam(left_forward_cam01))
+    print("right_forward_mesh_cam:         ", posz_vector_to_mesh_cam(right_forward_cam01))
+    print("avg_left_right_forward_mesh_cam:", posz_vector_to_mesh_cam(avg_left_right_forward_cam01))
+    print("SELECTED aria_forward_mesh_cam: ", posz_vector_to_mesh_cam(aria_forward_cam01))
+
+    print("\n--- Aria UP directions in mesh_cam/export vector convention ---")
+    print("rgb_up_mesh_cam:           ", posz_vector_to_mesh_cam(rgb_up_cam01))
+    print("left_up_mesh_cam:          ", posz_vector_to_mesh_cam(left_up_cam01))
+    print("right_up_mesh_cam:         ", posz_vector_to_mesh_cam(right_up_cam01))
+    print("avg_left_right_up_mesh_cam:", posz_vector_to_mesh_cam(avg_left_right_up_cam01))
+    print("SELECTED aria_up_mesh_cam: ", posz_vector_to_mesh_cam(aria_up_cam01))
+
     if args.gt_obj is not None:
         gt_obj = Path(args.gt_obj).expanduser()
         verts_mesh = load_obj_vertices(gt_obj)
@@ -391,6 +657,48 @@ def main():
         np.savetxt(out_path, glasses_center_cam01.reshape(1, 3), fmt="%.8f")
         print("\n[Saved] glasses center target in cam01 positive-Z coordinate:")
         print(out_path)
+        if args.remove_colmap_scale:
+            print("[Target convention] UN SCALED cam01 coordinate, compatible with mesh_cam_unscaled.")
+        else:
+            print("[Target convention] Original scaled EgoHumans cam01 coordinate, compatible with mesh_cam.")
+    # Backward-compatible: old argument still saves forward direction.
+    if args.save_orientation_target is not None:
+        out_path = Path(args.save_orientation_target).expanduser()
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        np.savetxt(out_path, aria_forward_cam01.reshape(1, 3), fmt="%.8f")
+
+        print("\n[Saved] Aria forward direction in cam01 positive-Z coordinate:")
+        print(out_path)
+        print("orientation_camera:", args.orientation_camera)
+        print("forward_axis:", args.forward_axis)
+        print("value:", aria_forward_cam01)
+
+    # Explicit forward output.
+    if args.save_forward_target is not None:
+        out_path = Path(args.save_forward_target).expanduser()
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        np.savetxt(out_path, aria_forward_cam01.reshape(1, 3), fmt="%.8f")
+
+        print("\n[Saved] Aria FORWARD direction in cam01 positive-Z coordinate:")
+        print(out_path)
+        print("orientation_camera:", args.orientation_camera)
+        print("forward_axis:", args.forward_axis)
+        print("value:", aria_forward_cam01)
+
+    # Explicit up output.
+    if args.save_up_target is not None:
+        out_path = Path(args.save_up_target).expanduser()
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+
+        np.savetxt(out_path, aria_up_cam01.reshape(1, 3), fmt="%.8f")
+
+        print("\n[Saved] Aria UP direction in cam01 positive-Z coordinate:")
+        print(out_path)
+        print("orientation_camera:", args.orientation_camera)
+        print("up_axis:", args.up_axis)
+        print("value:", aria_up_cam01)
 
 
 if __name__ == "__main__":
