@@ -189,7 +189,14 @@ for MODEL in tokenhmr 4dhumans; do
           --target_dir "$TARGET_DIR" \
           --mapping "$MAPPING" \
           --draw_lines \
-          --save_html "$OUT_HTML"
+          --save_html "$OUT_HTML" \
+          --show_camera \
+          --camera_scale 0.25 \
+          --scene_padding 1.30 \
+          --camera_eye_scale 1.0 \
+          --auto_rotate \
+          --hide_axis \
+          --hide_legend
 
         echo
         echo "Saved:"

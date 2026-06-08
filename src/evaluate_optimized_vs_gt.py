@@ -275,6 +275,46 @@ def parse_frame_and_det_id(obj_path):
 
     return frame, det_id
 
+def parse_mapping(mapping_str):
+    """
+    Parse fixed detection-to-Aria mapping.
+
+    Example:
+        "0:aria03,1:aria02,2:aria01,3:aria04"
+
+    Returns:
+        {
+            "0": "aria03",
+            "1": "aria02",
+            "2": "aria01",
+            "3": "aria04",
+        }
+    """
+    if mapping_str is None or mapping_str.strip() == "":
+        return None
+
+    mapping = {}
+
+    for pair in mapping_str.split(","):
+        pair = pair.strip()
+        if not pair:
+            continue
+
+        if ":" not in pair:
+            raise ValueError(f"Bad mapping item: {pair}")
+
+        det_id, aria = pair.split(":", 1)
+
+        det_id = det_id.strip()
+        aria = aria.strip()
+
+        if not aria.startswith("aria"):
+            aria = "aria" + aria
+
+        mapping[det_id] = aria
+
+    return mapping
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -300,6 +340,15 @@ def main():
         default="./smpl",
         help="SMPL folder containing basicModel_neutral_lbs_10_207_0_v1.0.0.pkl",
     )
+    parser.add_argument(
+        "--mapping",
+        default=None,
+        help=(
+            "Optional fixed detection-to-GT mapping, e.g. "
+            "'0:aria03,1:aria02,2:aria01,3:aria04'. "
+            "If provided, automatic identity matching is disabled."
+        ),
+    )
 
     parser.add_argument("--out_csv", default=None, help="Output per-pair CSV")
     parser.add_argument("--summary_csv", default=None, help="Output summary CSV")
@@ -318,6 +367,7 @@ def main():
     )
 
     args = parser.parse_args()
+    fixed_mapping = parse_mapping(args.mapping)
 
     project_root = Path(".").resolve()
 
@@ -359,6 +409,10 @@ def main():
     print(f"Prediction dir: {pred_dir}")
     print(f"GT root: {gt_root}")
     print(f"SMPL model dir: {smpl_model_dir}")
+    if fixed_mapping is not None:
+        print(f"Fixed mapping: {fixed_mapping}")
+    else:
+        print("Fixed mapping: None, using auto identity matching")
     print(f"Output CSV: {out_csv}")
     print(f"Summary CSV: {summary_csv}")
     print("============================================================")
@@ -465,28 +519,70 @@ def main():
 
             print(f"  {aria}: {gt_obj}")
 
-        mapping, score_matrix, best_score = find_best_identity_mapping(
-            pred_items,
-            gt_items,
-            root_index=args.root_index,
-        )
-
         pred_ids = [p["det_id"] for p in pred_items]
         gt_ids = [g["aria"] for g in gt_items]
 
-        print("\n---------- AUTO IDENTITY MATCHING ----------")
-        print("Criterion: minimum total root-aligned SMPL-joint MPJPE")
-        print("Prediction det ids:", pred_ids)
-        print("GT person ids:", gt_ids)
-        print("\nPairwise root-aligned MPJPE matrix, mm")
-        print("Rows = prediction det_id, columns = GT aria")
-        print(score_matrix)
-        print(f"\nBest total matching score: {best_score:.2f} mm")
+        if fixed_mapping is not None:
+            # ------------------------------------------------------------
+            # Fixed mapping mode.
+            # This is preferred for ablation studies where the
+            # detection-to-Aria correspondence is known.
+            # ------------------------------------------------------------
+            mapping = {}
 
-        print("\nAuto detection-to-GT identity mapping:")
-        for det_id in sorted(mapping.keys(), key=lambda x: int(x) if x.isdigit() else x):
-            print(f"  det {det_id} -> {mapping[det_id]}")
-        print("--------------------------------------------")
+            available_pred_ids = set(pred_ids)
+            available_gt_ids = set(gt_ids)
+
+            print("\n---------- FIXED IDENTITY MAPPING ----------")
+            print("Using user-provided mapping. Auto-matching is disabled.")
+            print("Prediction det ids:", pred_ids)
+            print("GT person ids:", gt_ids)
+
+            for det_id, aria in fixed_mapping.items():
+                if det_id not in available_pred_ids:
+                    print(f"[Warning] fixed mapping det {det_id} not found in predictions for frame {frame}")
+                    continue
+
+                if aria not in available_gt_ids:
+                    print(f"[Warning] fixed mapping aria {aria} not found in GT for frame {frame}")
+                    continue
+
+                mapping[det_id] = aria
+
+            if len(mapping) == 0:
+                print(f"[SKIP] Fixed mapping produced no valid pairs for frame {frame}")
+                continue
+
+            best_score = np.nan
+
+            print("\nFixed detection-to-GT identity mapping:")
+            for det_id in sorted(mapping.keys(), key=lambda x: int(x) if x.isdigit() else x):
+                print(f"  det {det_id} -> {mapping[det_id]}")
+            print("--------------------------------------------")
+
+        else:
+            # ------------------------------------------------------------
+            # Original auto-matching mode.
+            # ------------------------------------------------------------
+            mapping, score_matrix, best_score = find_best_identity_mapping(
+                pred_items,
+                gt_items,
+                root_index=args.root_index,
+            )
+
+            print("\n---------- AUTO IDENTITY MATCHING ----------")
+            print("Criterion: minimum total root-aligned SMPL-joint MPJPE")
+            print("Prediction det ids:", pred_ids)
+            print("GT person ids:", gt_ids)
+            print("\nPairwise root-aligned MPJPE matrix, mm")
+            print("Rows = prediction det_id, columns = GT aria")
+            print(score_matrix)
+            print(f"\nBest total matching score: {best_score:.2f} mm")
+
+            print("\nAuto detection-to-GT identity mapping:")
+            for det_id in sorted(mapping.keys(), key=lambda x: int(x) if x.isdigit() else x):
+                print(f"  det {det_id} -> {mapping[det_id]}")
+            print("--------------------------------------------")
 
         pred_by_id = {p["det_id"]: p for p in pred_items}
         gt_by_aria = {g["aria"]: g for g in gt_items}

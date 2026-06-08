@@ -209,7 +209,7 @@ for MODEL in tokenhmr 4dhumans; do
               --pred_obj_template "$PRED_OBJ" \
               --head_target_file "$TARGET" \
               --head_target_coord camera \
-              --target_vertex_ids 2787 3639 6248 2817 \
+              --target_vertex_ids 2800 6260 \
               --smpl_model_dir "$SMPL" \
               --out_obj "$OUT_OBJ" \
               $OPT_ARGS \

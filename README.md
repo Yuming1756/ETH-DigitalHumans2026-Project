@@ -5,10 +5,12 @@ This repository contains the project-specific scripts for comparing **TokenHMR**
 The pipeline includes:
 
 1. Preparing prediction outputs from TokenHMR or 4D-Humans.
-2. Extracting EgoHumans head targets.
+2. Extracting EgoHumans groundtruth meshes, ego-device targets locations and 2D keypoints.
 3. Running optimization.
 4. Visualizing baseline and optimized meshes.
 5. Computing evaluation metrics against EgoHumans ground truth.
+
+The results of the first and second step were uploaded to google drive. You can refer to the 2. Download the Data session.
 
 Large data files, SMPL model files, prediction outputs, optimized meshes, and generated `.npz` / `.obj` files are **not included** in this GitHub repository. They should be placed locally according to the folder structure below.
 
@@ -22,42 +24,10 @@ Project/
 ├── .gitignore
 │
 ├── smpl/
-│   ├── README.md
 │   └── basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
 │
 ├── data/
-│   ├── README.md
-│   ├── colmap/
-│   │   └── ...
-│   │
-│   ├── ego/
-│   │   ├── aria01/
-│   │   │   ├── calib/
-│   │   │   ├── images/
-│   │   │   └── undistort_map.npz
-│   │   ├── aria02/
-│   │   │   ├── calib/
-│   │   │   ├── images/
-│   │   │   └── undistort_map.npz
-│   │   ├── aria03/
-│   │   │   ├── calib/
-│   │   │   ├── images/
-│   │   │   └── undistort_map.npz
-│   │   └── aria04/
-│   │       ├── calib/
-│   │       ├── images/
-│   │       └── undistort_map.npz
-│   │
-│   ├── exo/
-│   │   └── cam01/
-│   │       └── undistorted_images/
-│   │           ├── 00001.jpg
-│   │           ├── 00002.jpg
-│   │           ├── 00003.jpg
-│   │           ├── 00004.jpg
-│   │           └── ...
-│   │
-│   ├── mesh_cam/
+│   ├── mesh_cam_unscaled/
 │   │   └── cam01/
 │   │       └── rgb/
 │   │           ├── 00001/
@@ -86,245 +56,391 @@ Project/
 │               ├── 00002.npy
 │               └── ...
 │
-├── head_targets/
-│   ├── README.md
+├── head_targets_unscaled/
 │   ├── 00001_aria01_cam01_egohumans_style.txt
 │   ├── 00001_aria02_cam01_egohumans_style.txt
 │   ├── 00001_aria03_cam01_egohumans_style.txt
 │   └── 00001_aria04_cam01_egohumans_style.txt
 │
 ├── src/
-│   ├── README.md
-│   ├── baseline_mpjpe_same_regressor.py
-│   ├── compute_total_loss.py
-│   ├── make_aria_head_target.py
-│   ├── smplify_v1_translation.py
-│   ├── evaluate_optimized_vs_gt.py
-│   ├── visualize_baseline_vs_egohumans_mesh3d.py
-│   └── visualize_frame_before_after_all_people.py
 │
 ├── TokenHMR/
 │   └── demo_out/
-│       ├── README.md
-│       ├── my_image/
-│       ├── my_image_smplify_adam/
-│       ├── my_image_smplify_lbfgs/
-│       └── my_image_smplify_v1/
+│       ├── my_image_with_smpl_params
 │
 ├── 4D-Humans/
 │   └── demo_out/
-│       ├── README.md
-│       ├── my_image/
-│       ├── my_image_smplify_adam/
-│       ├── my_image_smplify_lbfgs/
-│       └── my_image_smplify_v1/
+│       ├── my_image_with_smpl_params/
 │
 ├── extract_all_aria_targets.sh
 ├── run_baseline_all.sh
-├── run_smplify_frame.sh
+├── run_smplify_v1_frame.sh
+├── run_smplify_v2_frame.sh
+├── evaluate_frames_00001_00006.sh
 ├── visualize_baseline_vs_egohumans.sh
-└── visualize_smplify_frame.sh
+├── visualize_smplify_frame.sh
+├── visualize_smplify_v2_frame.sh
+└── run_v1_v2_and_ablation.sh
 ```
 
-## Required local files
+## 2. Download the Data
 
-### 1. SMPL model
+The code is hosted on GitHub, while the data and generated prediction files are hosted on Google Drive.
 
-Place the SMPL model file (basicModel_neutral_lbs_10_207_0_v1.0.0.pkl) here:
+Google Drive link:
 
 ```text
-smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
-```
-This file is required because the scripts use the SMPL joint regressor to convert SMPL vertices into joints.
-
-### 2. EgoHumans data
-
-Place EgoHumans data under:
-```text
-data/
-```
-The local data/ folder should be copied from the shared course directory as follows:
-
-```text
-data/colmap   <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/colmap
-data/ego      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/ego
-data/exo      <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/exo
-data/mesh_cam <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/mesh_cam
-data/poses2d  <- /work/courses/digital_human/team6/data/01_tagging/001_tagging/processed_data/poses2d
+https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J_iIgnnZ/view?usp=sharing
 ```
 
-### 3. TokenHMR outputs
-Copy the TokenHMR prediction outputs from:
-```text
-/work/courses/digital_human/team6/TokenHMR/demo_out/my_image
-```
-to:
-```text
-TokenHMR/demo_out/my_image/
-```
-
-Expected example files:
-```text
-TokenHMR/demo_out/my_image/00001_0.obj
-TokenHMR/demo_out/my_image/00001_0_tkhmr.npz
-```
-After optimization, results are saved to folders such as:
-```text
-TokenHMR/demo_out/my_image_smplify_lbfgs/
-TokenHMR/demo_out/my_image_smplify_adam/
-```
-
-### 4. 4D-Humans outputs
-Copy the 4D-Humans prediction outputs from:
-```text
-/work/courses/digital_human/team6/4D-Humans/demo_out/my_image
-```
-to:
-```text
-4D-Humans/demo_out/my_image/
-```
-
-Expected example files:
+Download the following files from Google Drive:
 
 ```text
-4D-Humans/demo_out/my_image/00001_0.obj
-4D-Humans/demo_out/my_image/00001_0_4dhumans.npz
-```
-After optimization, results are saved to folders such as:
-```text
-4D-Humans/demo_out/my_image_smplify_lbfgs/
-4D-Humans/demo_out/my_image_smplify_adam/
+release_data.tar.gz : https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J_iIgnnZ/view?usp=sharing
+release_data.tar.gz.sha256 : https://drive.google.com/file/d/1Re9haqnPJORknOzDWyBgy2b_t4jYhVmg/view?usp=sharing
 ```
 
-## Usage
-
-All commands should be run from the project root:
+Place them inside the cloned `Project/` folder:
 
 ```bash
-cd Project
+cd ~/DigitalHumans/Project
 ```
-### 1. Run baseline evaluation
 
-For TokenHMR:
+Verify the checksum:
+
 ```bash
-./run_baseline_all.sh tokenhmr
+sha256sum -c release_data.tar.gz.sha256
 ```
+
+Unpack the archive:
+
+```bash
+tar -xzvf release_data.tar.gz
+```
+
+Copy the released data into the project root:
+
+```bash
+rsync -avh release_data/ ./
+```
+
+After this step, verify that the required folders exist:
+
+```bash
+ls data/mesh_cam_unscaled/cam01/rgb
+ls data/poses2d/cam01/rgb
+ls keypoints2d
+ls head_targets_unscaled
+ls TokenHMR/demo_out
+ls 4D-Humans/demo_out
+```
+
+---
+
+## 3. SMPL Model
+
+Please download the neutral SMPL model separately and place it here:
+
+```text
+Project/smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+```
+
+Verify:
+
+```bash
+ls -lh ./smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+```
+
+---
+
+## 4. Environment Setup
+
+We provide a minimal environment for reproducing the SMPLify optimization, evaluation metrics, ablation tables, and Plotly visualizations from the released OBJ/NPZ/keypoint files.
+
+This minimal environment is not intended for rerunning the full EgoHumans data extraction, TokenHMR or 4D-Humans inference pipelines from raw images. 
+
+Create the environment:
+
+```bash
+conda env create -f environment.yml
+conda activate digitalhumans_team6
+```
+
+If `chumpy` fails during installation, install it manually after activating the environment:
+
+```bash
+python -m pip install --no-build-isolation chumpy==0.70
+```
+
+Test the environment:
+
+```bash
+python - <<'PY'
+import torch
+import numpy as np
+import scipy
+import pandas as pd
+import cv2
+import smplx
+import plotly
+import trimesh
+
+print("torch:", torch.__version__)
+print("torch cuda:", torch.version.cuda)
+print("cuda available:", torch.cuda.is_available())
+print("numpy:", np.__version__)
+print("scipy:", scipy.__version__)
+print("pandas:", pd.__version__)
+print("cv2:", cv2.__version__)
+print("smplx imported")
+print("plotly:", plotly.__version__)
+print("trimesh:", trimesh.__version__)
+PY
+```
+
+A minimal `environment_minimal.yml` is:
+
+```yaml
+name: digitalhumans_team6_minimal
+channels:
+  - nvidia/label/cuda-11.8.0
+  - nvidia
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip=24.0
+  - numpy=1.23.1
+  - scipy
+  - pandas
+  - matplotlib
+  - pillow
+  - pyyaml
+  - tqdm
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu118
+      - torch==2.1.0+cu118
+      - torchvision==0.16.0+cu118
+      - torchaudio==2.1.0+cu118
+      - smplx==0.1.28
+      - opencv-python==4.8.1.78
+      - plotly==6.7.0
+      - trimesh==4.12.2
+      - pyrender==0.1.45
+      - PyOpenGL==3.1.0
+      - yacs==0.1.8
+      - chumpy==0.70
+```
+
+---
+
+## 5. Make Scripts Executable
+
+Run this once:
+
+```bash
+chmod +x *.sh
+```
+
+---
+
+## 6. Reproduce Baseline Evaluation
+
+The baseline evaluation compares the original HMR meshes against EgoHumans GT. The script evaluates frames `00001` to `00006`.
+
 For 4D-Humans:
 
 ```bash
 ./run_baseline_all.sh 4dhumans
 ```
 
-This evaluates the original prediction meshes against EgoHumans ground-truth meshes.
-
-### 2. Extract EgoHumans head targets
-
-```bash
-./extract_all_aria_targets.sh 00001 cam01
-```
-
-This creates files in:
-
-```text
-head_targets/
-```
-
-Example:
-```text
-head_targets/00001_aria03_cam01_egohumans_style.txt
-```
-
-These targets are used by the optimization step.
-
-### 3. Run optimization
-
 For TokenHMR:
-```text
-./run_smplify_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04"
-```
-
-For 4D-Humans:
-```text
-./run_smplify_frame.sh 00001 4dhumans adam "0:aria03,1:aria02,2:aria01,3:aria04"
-```
-
-Arguments:
-```text
-1st argument: frame ID, e.g. 00001
-2nd argument: model name, tokenhmr or 4dhumans
-3rd argument: optimizer, lbfgs or adam
-4th argument: detection-to-Aria correspondence, e.g.,
-              "0:aria03,1:aria02,2:aria01,3:aria04"
-```
-
-Optimized meshes are saved to:
-```text
-TokenHMR/demo_out/my_image_smplify_adam/
-4D-Humans/demo_out/my_image_smplify_adam/
-```
-### 4. Visualize baseline predictions
-
-For TokenHMR:
-```bash
-./visualize_baseline_vs_egohumans.sh 00001 tokenhmr
-```
-
-For 4D-Humans:
-```bash
-./visualize_baseline_vs_egohumans.sh 00001 4dhumans
-```
-
-### 5. Visualize before and after optimization
-
-For TokenHMR:
-```bash
-./visualize_smplify_frame.sh 00001 tokenhmr adam "0:aria03,1:aria02,2:aria01,3:aria04"
-```
-For 4D-Humans:
-```bash
-./visualize_smplify_frame.sh 00001 4dhumans adam "0:aria03,1:aria02,2:aria01,3:aria04"
-```
-### 6. Evaluate optimized meshes
-
-Use the following command:
 
 ```bash
-python src/evaluate_optimized_vs_gt.py \
-  --frame 00001 \
-  --model tokenhmr \
-  --optimizer lbfgs \
-  --smpl_model_dir ./smpl
+./run_baseline_all.sh tokenhmr
 ```
 
-Arguments:
+Expected outputs:
+
 ```text
---frame:          frame ID, e.g. 00001
---model:          model name, tokenhmr or 4dhumans
---optimizer:      optimizer name, lbfgs or adam
---smpl_model_dir: SMPL model directory
+joint_baseline_4DHumans_00001_00006_auto_matched.txt
+joint_baseline_TokenHMR_00001_00006_auto_matched.txt
 ```
 
-The evaluation computes:
+This baseline script uses per-frame automatic identity matching based on root-aligned SMPL-joint MPJPE.
+
+---
+
+## 7. Reproduce SMPLify-v1 Translation Optimization
+
+SMPLify-v1 optimizes only the global translation while keeping the initial SMPL pose and shape fixed.
+
+Run:
+
+```bash
+./run_smplify_v1_frame.sh
+```
+
+This processes both TokenHMR and 4D-Humans for frames `00001` to `00006`.
+
+Outputs:
+
 ```text
-Raw MPJPE
-Root-aligned MPJPE
-PA-MPJPE
-Mean vertex error
-Global root drift
+TokenHMR/demo_out/my_image_smplify_v1/
+4D-Humans/demo_out/my_image_smplify_v1/
 ```
 
-The script performs automatic per-frame identity matching between detection IDs and EgoHumans identities.
+The script uses frame-specific detection-to-Aria mappings and SMPL ego-camera proxy vertices `2800` and `6260`.
 
-Identity matching
+---
 
-Detection IDs are not guaranteed to stay consistent across frames.
+## 8. Reproduce SMPLify-v2 Pose/Shape Refinement
 
-For example, this mapping may be correct in one frame:
+SMPLify-v2 starts from the SMPLify-v1 results. It fixes the optimized translation and refines global orientation, body pose, and shape.
+
+Run:
+
+```bash
+./run_smplify_v2_all_frames.sh
+```
+
+This processes both TokenHMR and 4D-Humans for frames `00001` to `00006`.
+
+Outputs:
+
 ```text
-det 0 -> aria03
-det 1 -> aria02
+TokenHMR/demo_out/my_image_smplify_v2/
+4D-Humans/demo_out/my_image_smplify_v2/
 ```
-but wrong in another frame.
 
-Therefore, the evaluation scripts use automatic per-frame matching based on minimum root-aligned SMPL-joint MPJPE.
+---
+
+## 9. Evaluate SMPLify-v1 and SMPLify-v2
+
+The evaluator supports fixed detection-to-Aria mapping through the `--mapping` argument. Fixed mapping is preferred for reproducible comparison.
+
+Run:
+
+```bash
+./evaluate_frames_00001_00006.sh
+```
+
+Expected merged outputs:
+
+```text
+metrics_00001_00006/tokenhmr_v1_00001_00006_fixed_mapping.csv
+metrics_00001_00006/tokenhmr_v2_00001_00006_fixed_mapping.csv
+metrics_00001_00006/4dhumans_v1_00001_00006_fixed_mapping.csv
+metrics_00001_00006/4dhumans_v2_00001_00006_fixed_mapping.csv
+```
+
+
+
+---
+
+## 10. Reproduce the Ablation Study
+
+The ablation compares three optimization schedules:
+
+1. `translation_only`: optimize global translation only.
+2. `two_stage`: translation first, then fixed-translation pose/shape refinement.
+3. `one_stage_all`: optimize translation, global orientation, pose, and shape jointly.
+
+Run the ablation for 4D-Humans:
+
+```bash
+./run_v1_v2_and_ablation.sh 4dhumans
+```
+
+Run the ablation for TokenHMR:
+
+```bash
+./run_v1_v2_and_ablation.sh tokenhmr
+```
+
+By default, this script runs frames:
+
+```text
+00019, 00020, 00021, 00022, 00023, 00024, 00025
+```
+
+and uses frame-specific fixed detection-to-Aria mappings.
+
+Expected outputs:
+
+```text
+metrics_ablation/4dhumans_00019_00025_three_pipeline_ablation_fixed.csv
+metrics_ablation/4dhumans_00019_00025_three_pipeline_summary_all.csv
+metrics_ablation/tokenhmr_00019_00025_three_pipeline_ablation_fixed.csv
+metrics_ablation/tokenhmr_00019_00025_three_pipeline_summary_all.csv
+```
+
+---
+
+## 11. Generate Visualizations
+
+The visualization scripts generate interactive Plotly HTML files under:
+
+```text
+visualizations/
+```
+
+### Baseline vs. EgoHumans GT
+
+```bash
+./visualize_baseline_vs_egohumans.sh
+```
+
+Example outputs:
+
+```text
+visualizations/00001_TokenHMR_baseline_vs_GT_clean.html
+visualizations/00001_4DHumans_baseline_vs_GT_clean.html
+```
+
+### Baseline vs. SMPLify-v1 vs. GT
+
+```bash
+./visualize_smplify_frame.sh
+```
+
+Example outputs:
+
+```text
+visualizations/00001_TokenHMR_baseline_vs_v1_vs_GT.html
+visualizations/00001_4DHumans_baseline_vs_v1_vs_GT.html
+```
+
+### Baseline vs. SMPLify-v1 vs. SMPLify-v2 vs. GT
+
+```bash
+./visualize_smplify_v2_frame.sh
+```
+
+Example outputs:
+
+```text
+visualizations/00001_TokenHMR_baseline_vs_v1_vs_v2_vs_GT.html
+visualizations/00001_4DHumans_baseline_vs_v1_vs_v2_vs_GT.html
+```
+
+Open any generated `.html` file in a browser.
+
+---
+
+## 12. Fixed Mapping Notes
+
+For the main SMPLify-v1/v2 experiments on frames `00001` to `00006`, we use:
+
+```text
+00001: 0:aria03,1:aria02,2:aria01,3:aria04
+00002: 0:aria02,1:aria03,2:aria04,3:aria01
+00003: 0:aria03,1:aria02,2:aria04,3:aria01
+00004: 0:aria03,1:aria04,2:aria02,3:aria01
+00005: 0:aria03,1:aria04,2:aria02,3:aria01
+00006: 0:aria04,1:aria03,2:aria02,3:aria01
+```
+
+For the ablation study on frames `00019` to `00025`, the mappings are defined inside `run_v1_v2_and_ablation.sh`.
+---
 

@@ -18,16 +18,15 @@ env/
 logs/
 
 # Ignore large data/output contents
-data/*
-TokenHMR/demo_out/*
-4D-Humans/demo_out/*
-head_targets/*
-
-# But keep README placeholders
-!data/README.md
-!TokenHMR/demo_out/README.md
-!4D-Humans/demo_out/README.md
-!head_targets/README.md
+data/
+TokenHMR/
+4D-Humans/
+head_targets_unscaled/
+keypoints2d/
+release_data/
+reproducibility_env/
+smpl/
+visualizations/
 
 # Large files
 *.obj
@@ -48,3 +47,6 @@ metrics_*.csv
 
 #text file
 *.txt
+
+release_data.tar.gz
+release_data.tar.gz.sha256

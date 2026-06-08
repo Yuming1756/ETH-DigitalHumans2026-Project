@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 # Always run relative to the Project folder where this script lives
 cd "$(dirname "$0")" || exit 1
@@ -14,20 +14,23 @@ cd "$(dirname "$0")" || exit 1
 #
 # For:
 #   frames 00001 to 00006
-#   models tokenhmr and 4dhumans
+#   models TokenHMR and 4D-Humans
 #
 # Outputs:
 #   visualizations/00001_TokenHMR_baseline_vs_v1_vs_GT.html
 #   visualizations/00001_4DHumans_baseline_vs_v1_vs_GT.html
 #   ...
 
-PROJECT_ROOT=~/DigitalHumans/Project
+PROJECT_ROOT="$HOME/DigitalHumans/Project"
 
 GT_ROOT="$PROJECT_ROOT/data/mesh_cam_unscaled/cam01/rgb"
 TARGET_DIR="$PROJECT_ROOT/head_targets_unscaled"
 
 VIS_SCRIPT="$PROJECT_ROOT/src/visualize_frame_before_after_all_people.py"
 VIS_DIR="$PROJECT_ROOT/visualizations"
+
+FRAMES=("00001" "00002" "00003" "00004" "00005" "00006")
+MODELS=("tokenhmr" "4dhumans")
 
 mkdir -p "$VIS_DIR"
 
@@ -71,13 +74,11 @@ get_model_config() {
     local FRAME="$2"
 
     case "$MODEL" in
-      tokenhmr)
+      tokenhmr|TokenHMR|tkhmr)
         MODEL_NAME="TokenHMR"
 
-        # Baseline prediction
-        # Use my_image if your baseline OBJ files are there.
-        # If you want the NPZ/SMPL-param version, change this to my_image_with_smpl_params.
-        BEFORE_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image"
+        # Baseline prediction with saved SMPL parameters
+        BEFORE_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image_with_smpl_params"
 
         # SMPLify-v1 optimized prediction
         AFTER_DIR="$PROJECT_ROOT/TokenHMR/demo_out/my_image_smplify_v1"
@@ -85,11 +86,11 @@ get_model_config() {
         OUT_HTML="$VIS_DIR/${FRAME}_TokenHMR_baseline_vs_v1_vs_GT.html"
         ;;
 
-      4dhumans)
+      4dhumans|4DHumans|4dh|4D)
         MODEL_NAME="4DHumans"
 
-        # Baseline prediction
-        BEFORE_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image"
+        # Baseline prediction with saved SMPL parameters
+        BEFORE_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_with_smpl_params"
 
         # SMPLify-v1 optimized prediction
         AFTER_DIR="$PROJECT_ROOT/4D-Humans/demo_out/my_image_smplify_v1"
@@ -130,8 +131,8 @@ fi
 # ------------------------------------------------------------
 # Main loop: both models, frames 00001–00006
 # ------------------------------------------------------------
-for MODEL in tokenhmr 4dhumans; do
-    for FRAME in 00001 00002 00003 00004 00005 00006; do
+for MODEL in "${MODELS[@]}"; do
+    for FRAME in "${FRAMES[@]}"; do
         get_model_config "$MODEL" "$FRAME"
         MAPPING=$(get_mapping_for_frame "$FRAME")
 
@@ -169,6 +170,21 @@ for MODEL in tokenhmr 4dhumans; do
             continue
         fi
 
+        # Check at least one baseline OBJ and one v1 OBJ exist for this frame.
+        if ! ls "$BEFORE_DIR"/${FRAME}_*.obj >/dev/null 2>&1; then
+            echo "[Warning] No baseline OBJ files found for frame $FRAME:"
+            echo "$BEFORE_DIR/${FRAME}_*.obj"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
+        if ! ls "$AFTER_DIR"/${FRAME}_*.obj >/dev/null 2>&1; then
+            echo "[Warning] No SMPLify-v1 OBJ files found for frame $FRAME:"
+            echo "$AFTER_DIR/${FRAME}_*.obj"
+            echo "Skipping $MODEL_NAME frame $FRAME."
+            continue
+        fi
+
         python "$VIS_SCRIPT" \
           --frame "$FRAME" \
           --before_dir "$BEFORE_DIR" \
@@ -177,7 +193,14 @@ for MODEL in tokenhmr 4dhumans; do
           --target_dir "$TARGET_DIR" \
           --mapping "$MAPPING" \
           --draw_lines \
-          --save_html "$OUT_HTML"
+          --save_html "$OUT_HTML" \
+          --show_camera \
+          --camera_scale 0.25 \
+          --scene_padding 1.30 \
+          --camera_eye_scale 1.0 \
+          --auto_rotate \
+          --hide_axis \
+          --hide_legend
 
         echo
         echo "Saved:"

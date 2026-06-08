@@ -1,0 +1,29 @@
+name: digitalhumans_team6
+channels:
+  - nvidia/label/cuda-11.8.0
+  - nvidia
+  - defaults
+
+dependencies:
+  - python=3.10
+  - pip=24.0
+  - numpy=1.23.1
+  - scipy
+  - pandas
+  - matplotlib
+  - pillow
+  - pyyaml
+  - tqdm
+  - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu118
+      - torch==2.1.0+cu118
+      - torchvision==0.16.0+cu118
+      - torchaudio==2.1.0+cu118
+      - smplx==0.1.28
+      - opencv-python==4.8.1.78
+      - plotly==6.7.0
+      - trimesh==4.12.2
+      - pyrender==0.1.45
+      - PyOpenGL==3.1.0
+      - yacs==0.1.8
+      - chumpy==0.70
