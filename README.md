@@ -87,12 +87,6 @@ Project/
 
 The code is hosted on GitHub, while the data and generated prediction files are hosted on Google Drive.
 
-Google Drive link:
-
-```text
-https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J_iIgnnZ/view?usp=sharing
-```
-
 Download the following files from Google Drive:
 
 ```text
