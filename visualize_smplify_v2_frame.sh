@@ -22,7 +22,7 @@ cd "$(dirname "$0")" || exit 1
 #   visualizations/00001_4DHumans_baseline_vs_v1_vs_v2_vs_GT.html
 #   ...
 
-PROJECT_ROOT=~/DigitalHumans/Project
+PROJECT_ROOT="$(pwd)"
 
 GT_ROOT="$PROJECT_ROOT/data/mesh_cam_unscaled/cam01/rgb"
 TARGET_DIR="$PROJECT_ROOT/head_targets_unscaled"
