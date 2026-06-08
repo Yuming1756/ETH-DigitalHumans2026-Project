@@ -27,6 +27,8 @@ ETH-DigitalHumans2026-Project/
 │   └── basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
 │
 ├── data/
+│   ├── colmap/
+│   │   └── workplace/
 │   ├── mesh_cam_unscaled/
 │   │   └── cam01/
 │   │       └── rgb/
@@ -305,7 +307,7 @@ SMPLify-v2 starts from the SMPLify-v1 results. It fixes the optimized translatio
 Run:
 
 ```bash
-./run_smplify_v2_all_frames.sh
+./run_smplify_v2_frame.sh
 ```
 
 This processes both TokenHMR and 4D-Humans for frames `00001` to `00006`.
