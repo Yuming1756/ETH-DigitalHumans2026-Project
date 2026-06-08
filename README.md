@@ -125,6 +125,7 @@ After this step, verify that the required folders exist:
 ```bash
 ls data/mesh_cam_unscaled/cam01/rgb
 ls data/poses2d/cam01/rgb
+ls data/colmap
 ls keypoints2d
 ls head_targets_unscaled
 ls TokenHMR/demo_out
