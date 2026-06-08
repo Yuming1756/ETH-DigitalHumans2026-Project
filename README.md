@@ -177,7 +177,78 @@ chmod +x *.sh
 
 ---
 
-## 6. Reproduce Baseline Evaluation
+## 6. Generate Head Targets and 2D Keypoint JSON Files
+
+The released data may already include the precomputed head_targets_unscaled/ and keypoints2d/ folders. Therefore, you can skip this session. 
+
+However, if these folders are missing or you would like to try other frames, they can be generated from the EgoHumans ground-truth meshes and 2D pose files using the provided shell scripts.
+
+### Generate Aria Head Targets
+
+The head-target files are used by SMPLify-v1 and SMPLify-v2 as the ego-camera / head-position alignment targets. They are generated from the unscaled EgoHumans ground-truth meshes in data/mesh_cam_unscaled/<exo_cam>/rgb/<frame>/.
+
+For one frame, run:
+
+```bash
+./extract_all_aria_targets.sh 00001 cam01
+```
+
+This creates one target file for each Aria identity:
+
+```text
+head_targets_unscaled/00001_aria01_cam01_egohumans_style.txt
+head_targets_unscaled/00001_aria02_cam01_egohumans_style.txt
+head_targets_unscaled/00001_aria03_cam01_egohumans_style.txt
+head_targets_unscaled/00001_aria04_cam01_egohumans_style.txt
+```
+
+To generate targets for frames 00001 to 00006, run:
+
+```bash
+for FRAME in 00001 00002 00003 00004 00005 00006; do
+    ./extract_all_aria_targets.sh "$FRAME" cam01
+done
+```
+
+The script uses the unscaled GT meshes and saves the targets under head_targets_unscaled/, so the target coordinates remain consistent with mesh_cam_unscaled.
+
+### Generate 2D Keypoint JSON Files
+
+The 2D keypoint JSON files are used by SMPLify-v2 and the ablation experiments for 2D reprojection constraints. They are generated from EgoHumans 2D pose files stored under data/poses2d/<exo_cam>/rgb/.
+
+For one frame, run:
+
+```bash
+./make_all_keypoints2d_json_frame.sh 00001 cam01
+```
+
+This creates one JSON file for each Aria identity:
+
+```text
+keypoints2d/00001_aria01_cam01.json
+keypoints2d/00001_aria02_cam01.json
+keypoints2d/00001_aria03_cam01.json
+keypoints2d/00001_aria04_cam01.json
+```
+
+To generate keypoint JSON files for frames 00001 to 00006, run:
+
+```bash
+for FRAME in 00001 00002 00003 00004 00005 00006; do
+    ./make_all_keypoints2d_json_frame.sh "$FRAME" cam01
+done
+```
+
+The script reads the corresponding EgoHumans pose file, for example:
+
+```text
+data/poses2d/cam01/rgb/00001.npy
+```
+
+and writes the extracted per-person keypoints to keypoints2d/.
+
+
+## 7. Reproduce Baseline Evaluation
 
 The baseline evaluation compares the original HMR meshes against EgoHumans GT. The script evaluates frames `00001` to `00006`.
 
@@ -204,7 +275,7 @@ This baseline script uses per-frame automatic identity matching based on root-al
 
 ---
 
-## 7. Reproduce SMPLify-v1 Translation Optimization
+## 8. Reproduce SMPLify-v1 Translation Optimization
 
 SMPLify-v1 optimizes only the global translation while keeping the initial SMPL pose and shape fixed.
 
@@ -227,7 +298,7 @@ The script uses frame-specific detection-to-Aria mappings and SMPL ego-camera pr
 
 ---
 
-## 8. Reproduce SMPLify-v2 Pose/Shape Refinement
+## 9. Reproduce SMPLify-v2 Pose/Shape Refinement
 
 SMPLify-v2 starts from the SMPLify-v1 results. It fixes the optimized translation and refines global orientation, body pose, and shape.
 
@@ -248,7 +319,7 @@ TokenHMR/demo_out/my_image_smplify_v2/
 
 ---
 
-## 9. Evaluate SMPLify-v1 and SMPLify-v2
+## 10. Evaluate SMPLify-v1 and SMPLify-v2
 
 The evaluator supports fixed detection-to-Aria mapping through the `--mapping` argument. Fixed mapping is preferred for reproducible comparison.
 
@@ -271,7 +342,7 @@ metrics_00001_00006/4dhumans_v2_00001_00006_fixed_mapping.csv
 
 ---
 
-## 10. Reproduce the Ablation Study
+## 11. Reproduce the Ablation Study
 
 The ablation compares three optimization schedules:
 
@@ -310,7 +381,7 @@ metrics_ablation/tokenhmr_00019_00025_three_pipeline_summary_all.csv
 
 ---
 
-## 11. Generate Visualizations
+## 12. Generate Visualizations
 
 The visualization scripts generate interactive Plotly HTML files under:
 
@@ -361,7 +432,7 @@ Open any generated `.html` file in a browser.
 
 ---
 
-## 12. Fixed Mapping Notes
+## 13. Fixed Mapping Notes
 
 For the main SMPLify-v1/v2 experiments on frames `00001` to `00006`, we use:
 
