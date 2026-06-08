@@ -441,5 +441,6 @@ For the main SMPLify-v1/v2 experiments on frames `00001` to `00006`, we use:
 00006: 0:aria04,1:aria03,2:aria02,3:aria01
 ```
 For the ablation study on frames `00019` to `00025`, the mappings are defined inside `run_v1_v2_and_ablation.sh`.
+
 ---
 
