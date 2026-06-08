@@ -298,6 +298,13 @@ TokenHMR/demo_out/my_image_smplify_v1/
 
 The script uses frame-specific detection-to-Aria mappings and SMPL ego-camera proxy vertices `2800` and `6260`.
 
+### Troubleshooting
+In case of `ImportError: /lib/x86_64-linux-gnu/libstdc++.so.6: version GLIBCXX_3.4.29 not found`, try:
+```
+conda install -c conda-forge libstdcxx-ng libgcc-ng
+export LD_LIBRARY_PATH=$CONDA_PREFIX/lib:$LD_LIBRARY_PATH
+```
+
 ---
 
 ## 9. Reproduce SMPLify-v2 Pose/Shape Refinement
