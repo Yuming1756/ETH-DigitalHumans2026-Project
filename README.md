@@ -19,7 +19,7 @@ Large data files, SMPL model files, prediction outputs, optimized meshes, and ge
 ## Folder structure
 
 ```text
-Project/
+ETH-DigitalHumans2026-Project/
 ├── README.md
 ├── .gitignore
 │
@@ -94,10 +94,10 @@ release_data.tar.gz : https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J
 release_data.tar.gz.sha256 : https://drive.google.com/file/d/1Re9haqnPJORknOzDWyBgy2b_t4jYhVmg/view?usp=sharing
 ```
 
-Place them inside the cloned `Project/` folder:
+Place them inside the cloned `ETH-DigitalHumans2026-Project/` folder:
 
 ```bash
-cd ~/DigitalHumans/Project
+cd ./ETH-DigitalHumans2026-Project
 ```
 
 Verify the checksum:
@@ -136,7 +136,7 @@ ls 4D-Humans/demo_out
 Please download the neutral SMPL model separately and place it here:
 
 ```text
-Project/smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
+ETH-DigitalHumans2026-Project/smpl/basicModel_neutral_lbs_10_207_0_v1.0.0.pkl
 ```
 
 Verify:
