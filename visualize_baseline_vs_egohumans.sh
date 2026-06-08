@@ -10,7 +10,7 @@ cd "$(dirname "$0")" || exit 1
 # Visualizes baseline model prediction vs EgoHumans GT
 # for frames 00001–00006 and both TokenHMR / 4D-Humans.
 
-PROJECT_ROOT=~/DigitalHumans/Project
+PROJECT_ROOT="$(pwd)"
 
 VIS_SCRIPT="$PROJECT_ROOT/src/visualize_baseline_vs_egohumans_mesh3d.py"
 VIS_DIR="$PROJECT_ROOT/visualizations"
