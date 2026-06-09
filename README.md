@@ -93,7 +93,7 @@ Download the following files from Google Drive:
 
 ```text
 release_data.tar.gz : https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J_iIgnnZ/view?usp=sharing
-release_data.tar.gz.sha256 : https://drive.google.com/file/d/1Re9haqnPJORknOzDWyBgy2b_t4jYhVmg/view?usp=sharing
+release_data.tar.gz.sha256 : https://drive.google.com/file/d/1Y1mA5CciYtqlq34S3D-ieqp-J_iIgnnZ/view?usp=sharing
 ```
 
 Place them inside the cloned `ETH-DigitalHumans2026-Project/` folder:
