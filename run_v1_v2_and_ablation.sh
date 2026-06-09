@@ -313,7 +313,7 @@ if [ "$RUN_OPTIMIZATION" = "1" ]; then
               --lr 0.05 \
               --lbfgs_max_iter 10000 \
               --w_2d 10.0 \
-              --w_face_2d 10.0 \
+              --w_face_2d 0.0 \
               --w_head 5.0 \
               --proxy_radius 0.0 \
               --w_trans_prior 0.0 \
